@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f6f3ec">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<title>What is Bigger?</title>
+<title>Natural Wonders · Where is Bigger?</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
 <style>
@@ -213,13 +213,14 @@ html.phone body.timed .choice{min-height:44px;padding:8px 12px}
 html.phone body.timed .rank .btn{position:static!important;box-shadow:none!important}
 html.phone body.timed .lockbar{bottom:calc(64px + env(safe-area-inset-bottom))!important}
 html.phone body.timed .p3 .pbar{bottom:calc(64px + env(safe-area-inset-bottom))}
+.nwser{font:600 12px/1.4 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}.nwser b{color:#b8663a;font-weight:700}.nwser a{color:inherit;text-decoration:underline;text-underline-offset:3px}.nwser a:hover{color:var(--ink)}a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
 </style>
 </head>
 <body>
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
-const VERSION='v8';
+const VERSION='v9';
 /* ---------- timer (shared) ---------- */
 const TM={on:true,left:0,secs:15,copper:5,t0:0,iv:null,key:null,onUp:null,
   start(key,secs,copper,onUp){if(!this.on){this.hide();return}if(this.key===key&&this.iv)return;this.stop();this.key=key;this.secs=secs;this.copper=copper;this.onUp=onUp;this.t0=performance.now();this.build();this.draw(secs);
@@ -365,7 +366,7 @@ function syncTimer(){if(S.screen!=='play'){TM.hide();return}
   if(S.busy)return;TM.start(GSER+':'+S.cur,15,5,()=>{S.picks[S.cur]=null;S.timedOut[S.cur]=true;S.times[S.cur]=15;S.cur++;if(S.cur>=S.pairs.length)S.screen='results';render()})}
 function optRow(key,obj){return `<div class="opts">${Object.entries(obj).map(([k,v])=>`<button class="opt ${S[key]===k?'on':''}" onclick="setOpt('${key}','${k}')">${v.t}${v.s?`<small>${v.s}</small>`:''}</button>`).join('')}</div>`}
 function menuHTML(){
-  return `<div class="menuhead"><h1>What is Bigger?</h1>
+  return `<div class="menuhead"><div><div class="nwser"><b>Natural Wonders</b> · Game 8 of 10 · <a href="https://jmcpublic.github.io/">All games</a></div><h1>Where is Bigger?</h1></div>
   <p class="sub">Which covers more land? Make all your guesses, then see the real sizes at the end. Prepare to be surprised.</p></div>
   <div class="panel menu">
     <div class="mcol">
@@ -380,7 +381,7 @@ function menuHTML(){
       <div class="row startrow"><button class="btn" onclick="startGame()">Start — ${S.mode==='bigger'?S.rounds3+' rounds':S.count+' pairs'}</button></div>
     </div>
   </div>
-  <p class="foot">Layout <span class="lay">${Object.entries(LAYOUTS).map(([k,v])=>`<button class="${S.layout===k?'on':''}" onclick="setLayout('${k}')">${v}${k==='auto'&&S.layout==='auto'?' ('+LAYOUTS[autoLayout()]+')':''}</button>`).join('')}</span><br>${COUNTRIES.length} countries · areas are total area in km² (land plus inland water) · What is Bigger ${VERSION} · <button class="srclink" onclick="openSources()">Sources</button></p>`;
+  <p class="foot">Layout <span class="lay">${Object.entries(LAYOUTS).map(([k,v])=>`<button class="${S.layout===k?'on':''}" onclick="setLayout('${k}')">${v}${k==='auto'&&S.layout==='auto'?' ('+LAYOUTS[autoLayout()]+')':''}</button>`).join('')}</span><br>${COUNTRIES.length} countries · areas are total area in km² (land plus inland water) · Natural Wonders: Where is Bigger ${VERSION} · <button class="srclink" onclick="openSources()">Sources</button></p>`;
 }
 window.setOpt=(k,v)=>{S[k]=v;saveSettings();render()};
 window.startGame=()=>{if(S.mode==='bigger'){const g=makeGame3();if(!g){toast('Not enough countries for that combination. Try another region.');return}GSER++;TM.left=0;S.game3=g;S.cur=0;S.screen='play';render();return}
@@ -391,7 +392,7 @@ function playHTML(){
   const [a,b]=S.pairs[S.cur];const named=S.mode==='names';
   const prog=S.pairs.map((_,i)=>`<i class="${i<S.cur?'done':i===S.cur?'now':''}"></i>`).join('');
   const card=(c,side,k)=>`<button class="cc" id="card${side}" onclick="pick(${side})" aria-label="Pick ${named?esc(c.n):'country '+k}"><span class="plate" aria-hidden="true">${k}</span>${shapeSVG(c)}${named?`<div class="nm">${esc(c.n)}</div>`:''}<span class="key">${side?'→':'←'} key</span></button>`;
-  return `<div class="play"><div class="top"><h1>What is Bigger?</h1><div class="row">${S.cur>0&&!TM.on?'<button class="link" onclick="back()">← Previous pair</button>':''}<button class="link" onclick="quit()">Quit</button></div></div>
+  return `<div class="play"><div class="top"><h1>Where is Bigger?</h1><div class="row">${S.cur>0&&!TM.on?'<button class="link" onclick="back()">← Previous pair</button>':''}<button class="link" onclick="quit()">Quit</button></div></div>
   <div class="prog">${prog}</div>
   <div class="q">Which is bigger?<span>Pair ${S.cur+1} of ${S.pairs.length}</span></div>
   <div class="pair">${card(a,0,'A')}${card(b,1,'B')}</div>
@@ -400,7 +401,7 @@ function playHTML(){
 function play3HTML(){
   const R=S.game3[S.cur],t=R.t,phone=document.documentElement.classList.contains('phone');
   const prog=S.game3.map((_,i)=>`<i class="${i<S.cur?'done':i===S.cur?'now':''}"></i>`).join('');
-  const head=`<div class="top"><h1>What is Bigger?</h1><div class="row">${S.cur>0&&!TM.on?'<button class="link" onclick="back()">← Previous round</button>':''}<button class="link" onclick="quit()">Quit</button></div></div>
+  const head=`<div class="top"><h1>Where is Bigger?</h1><div class="row">${S.cur>0&&!TM.on?'<button class="link" onclick="back()">← Previous round</button>':''}<button class="link" onclick="quit()">Quit</button></div></div>
   <div class="prog">${prog}</div>`;
   const picked=R.ticks.map((v,i)=>v?LET[i]:null).filter(Boolean);
   if(phone){
@@ -466,7 +467,7 @@ function resultsHTML(){
   return `<h1>Results</h1>
   <div class="panel"><div class="score"><div class="big">${right}/${n}</div><div><h2>${verdict}</h2>${TM.summary(right,n,(S.times||[]).reduce((s,v)=>s+(v||0),0))}<div style="color:var(--muted);font-size:14px">${MODES[S.mode].t} · ${DIFFS[S.diff].t} · ${REGIONS[S.region].t}</div></div></div>
   ${sp}
-  <div class="row" style="margin-top:18px"><button class="btn" onclick="startGame()">Play again</button><button class="btn ghost" onclick="quit()">Change settings</button><button class="btn ghost" onclick="share(${right},${n})">Share score</button><button class="btn ghost" onclick="openSources()">Sources</button></div></div>
+  <div class="row" style="margin-top:18px"><button class="btn" onclick="startGame()">Play again</button><button class="btn ghost" onclick="quit()">Change settings</button><button class="btn ghost" onclick="share(${right},${n})">Share score</button><button class="btn ghost" onclick="openSources()">Sources</button><a class="btn ghost" href="https://jmcpublic.github.io/">More games</a></div></div>
   <div class="label" style="margin-top:28px">The answers, drawn to the same scale (bigger country in black)</div>
   ${rows.join('')}
   <p class="foot">Areas: CIA World Factbook (final edition, total area); England, Scotland, Wales and Northern Ireland: Office for National Statistics. Outlines: Natural Earth. <button class="srclink" onclick="openSources()">See all sources</button></p>`;
@@ -507,7 +508,7 @@ function results3HTML(){
   <p class="foot">Areas: CIA World Factbook (final edition, total area); England, Scotland, Wales and Northern Ireland: Office for National Statistics. Outlines: Natural Earth. <button class="srclink" onclick="openSources()">See all sources</button></p>`;
 }
 window.share=async(r,n)=>{
-  const t=`What is Bigger? I scored ${r}/${n} (${S.mode==='bigger'?'Bigger than…, ':''}${DIFFS[S.diff].t}, ${REGIONS[S.region].t}). Can you beat me?`;
+  const t=`Natural Wonders: Where is Bigger. I scored ${r}/${n} (${S.mode==='bigger'?'Bigger than…, ':''}${DIFFS[S.diff].t}, ${REGIONS[S.region].t}). Can you beat me?`;
   try{if(navigator.share){await navigator.share({text:t,url:location.href.startsWith('http')?location.href:undefined});return}}catch(e){return}
   try{await navigator.clipboard.writeText(t+(location.href.startsWith('http')?' '+location.href:''));toast('Score copied. Paste it to a friend.')}catch(e){toast(t)}
 };
