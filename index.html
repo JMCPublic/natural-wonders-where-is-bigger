@@ -220,7 +220,7 @@ html.phone body.timed .p3 .pbar{bottom:calc(64px + env(safe-area-inset-bottom))}
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
-const VERSION='v9';
+const VERSION='v10';
 /* ---------- timer (shared) ---------- */
 const TM={on:true,left:0,secs:15,copper:5,t0:0,iv:null,key:null,onUp:null,
   start(key,secs,copper,onUp){if(!this.on){this.hide();return}if(this.key===key&&this.iv)return;this.stop();this.key=key;this.secs=secs;this.copper=copper;this.onUp=onUp;this.t0=performance.now();this.build();this.draw(secs);
@@ -363,7 +363,7 @@ function render(){
 }
 function syncTimer(){if(S.screen!=='play'){TM.hide();return}
   if(S.mode==='bigger'){const R=S.game3[S.cur];if(R.done)return;TM.start(GSER+':'+S.cur,30,10,()=>{R.timedOut=true;R.secs=30;R.done=true;S.cur++;if(S.cur>=S.game3.length)S.screen='results';render()});return}
-  if(S.busy)return;TM.start(GSER+':'+S.cur,15,5,()=>{S.picks[S.cur]=null;S.timedOut[S.cur]=true;S.times[S.cur]=15;S.cur++;if(S.cur>=S.pairs.length)S.screen='results';render()})}
+  if(S.busy)return;TM.start(GSER+':'+S.cur,30,10,()=>{S.picks[S.cur]=null;S.timedOut[S.cur]=true;S.times[S.cur]=30;S.cur++;if(S.cur>=S.pairs.length)S.screen='results';render()})}
 function optRow(key,obj){return `<div class="opts">${Object.entries(obj).map(([k,v])=>`<button class="opt ${S[key]===k?'on':''}" onclick="setOpt('${key}','${k}')">${v.t}${v.s?`<small>${v.s}</small>`:''}</button>`).join('')}</div>`}
 function menuHTML(){
   return `<div class="menuhead"><div><div class="nwser"><b>Natural Wonders</b> · Game 8 of 10 · <a href="https://jmcpublic.github.io/">All games</a></div><h1>Where is Bigger?</h1></div>
@@ -374,7 +374,7 @@ function menuHTML(){
       ${S.mode==='bigger'?`<div class="label">Number of rounds</div>
       <div class="opts">${ROUNDS3.map(n=>`<button class="opt ${S.rounds3===n?'on':''}" onclick="setOpt('rounds3',${n})">${n} rounds<small>${n*5} answers</small></button>`).join('')}</div>`:`<div class="label">Number of pairs</div>
       <div class="opts">${COUNTS.map(n=>`<button class="opt ${S.count===n?'on':''}" onclick="setOpt('count',${n})">${n} pairs</button>`).join('')}</div>`}
-      ${TM.menuRow(S.mode==='bigger'?'30 seconds a round':'15 seconds a pair')}<div class="label">Difficulty</div>${optRow('diff',DIFFS)}
+      ${TM.menuRow('30 seconds a round')}<div class="label">Difficulty</div>${optRow('diff',DIFFS)}
     </div>
     <div class="mcol">
       <div class="label">Countries from</div>${optRow('region',REGIONS)}
