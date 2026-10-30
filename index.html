@@ -601,8 +601,8 @@ function fit(){busy=true;const root=document.documentElement;
     // games without a separate answer panel: shrink the whole board a little if it cannot fit
     zoomKids(play,1);play.style.overflow='hidden';const over=play.scrollHeight-play.clientHeight;if(over>1){const z=Math.max(.7,play.clientHeight/play.scrollHeight);zoomKids(play,z)}
   }
-  requestAnimationFrame(()=>{busy=false;if(queued){queued=false;fit()}})}
-function soon(){if(busy){queued=true;return}requestAnimationFrame(fit)}
+  setTimeout(()=>{busy=false;if(queued){queued=false;fit()}},30)}
+function soon(){if(busy){queued=true;return}setTimeout(fit,16)}
 new MutationObserver(m=>{if(m.some(x=>x.type==='childList'))soon()}).observe(document.body,{childList:true,subtree:true});
 addEventListener('resize',soon);if(window.visualViewport)visualViewport.addEventListener('resize',soon);
 addEventListener('orientationchange',()=>setTimeout(soon,250));
@@ -687,7 +687,7 @@ function tick(){
     ex.innerHTML=`<span class="pl">${GAMES.map(g=>`<i class="${rec.games[g.slug]?'y':''}"></i>`).join('')}</span><span><b>${done} of ${GAMES.length}</b> Natural Wonders explored</span><a href="/wonders/#record">Your record →</a>`;
     row.after(a,ex)}
 }
-let q=false;new MutationObserver(()=>{if(q)return;q=true;requestAnimationFrame(()=>{q=false;tick()})}).observe(document.body,{childList:true,subtree:true});tick();
+let q=false;new MutationObserver(()=>{if(q)return;q=true;setTimeout(()=>{q=false;tick()},30)}).observe(document.body,{childList:true,subtree:true});tick();
 })();
 </script>
 
