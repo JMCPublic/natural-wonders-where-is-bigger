@@ -366,7 +366,7 @@ function syncTimer(){if(S.screen!=='play'){TM.hide();return}
   if(S.busy)return;TM.start(GSER+':'+S.cur,30,10,()=>{S.picks[S.cur]=null;S.timedOut[S.cur]=true;S.times[S.cur]=30;S.cur++;if(S.cur>=S.pairs.length)S.screen='results';render()})}
 function optRow(key,obj){return `<div class="opts">${Object.entries(obj).map(([k,v])=>`<button class="opt ${S[key]===k?'on':''}" onclick="setOpt('${key}','${k}')">${v.t}${v.s?`<small>${v.s}</small>`:''}</button>`).join('')}</div>`}
 function menuHTML(){
-  return `<div class="menuhead"><div><div class="nwser"><b>Natural Wonders</b> · Game 8 of 10 · <a href="https://jmcpublic.github.io/">All games</a></div><h1>Where is Bigger?</h1></div>
+  return `<div class="menuhead"><div><div class="nwser"><b>Natural Wonders</b> · Game 8 of 10 · <a href="https://twominute.games/wonders/">All games</a></div><h1>Where is Bigger?</h1></div>
   <p class="sub">Which covers more land? Make all your guesses, then see the real sizes at the end. Prepare to be surprised.</p></div>
   <div class="panel menu">
     <div class="mcol">
@@ -467,7 +467,7 @@ function resultsHTML(){
   return `<h1>Results</h1>
   <div class="panel"><div class="score"><div class="big">${right}/${n}</div><div><h2>${verdict}</h2>${TM.summary(right,n,(S.times||[]).reduce((s,v)=>s+(v||0),0))}<div style="color:var(--muted);font-size:14px">${MODES[S.mode].t} · ${DIFFS[S.diff].t} · ${REGIONS[S.region].t}</div></div></div>
   ${sp}
-  <div class="row" style="margin-top:18px"><button class="btn" onclick="startGame()">Play again</button><button class="btn ghost" onclick="quit()">Change settings</button><button class="btn ghost" onclick="share(${right},${n})">Share score</button><button class="btn ghost" onclick="openSources()">Sources</button><a class="btn ghost" href="https://jmcpublic.github.io/">More games</a></div></div>
+  <div class="row" style="margin-top:18px"><button class="btn" onclick="startGame()">Play again</button><button class="btn ghost" onclick="quit()">Change settings</button><button class="btn ghost" onclick="share(${right},${n})">Share score</button><button class="btn ghost" onclick="openSources()">Sources</button><a class="btn ghost" href="https://twominute.games/wonders/">More games</a></div></div>
   <div class="label" style="margin-top:28px">The answers, drawn to the same scale (bigger country in black)</div>
   ${rows.join('')}
   <p class="foot">Areas: CIA World Factbook (final edition, total area); England, Scotland, Wales and Northern Ireland: Office for National Statistics. Outlines: Natural Earth. <button class="srclink" onclick="openSources()">See all sources</button></p>`;
