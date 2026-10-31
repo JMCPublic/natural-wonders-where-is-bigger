@@ -260,7 +260,7 @@ const COUNTS=[10,15,20];
 const DIFFS={easy:{t:'Easy',s:'2× to 8× apart',lo:2,hi:8},medium:{t:'Medium',s:'1.3× to 2.2× apart',lo:1.3,hi:2.2},hard:{t:'Hard',s:'Within 35% of each other',lo:1.03,hi:1.35}};
 const REGIONS={world:{t:'Whole world',s:'Mixed from every continent'},home:{t:'Home nations',s:'England, Scotland, Wales, NI or UK v the world'},Europe:{t:'Europe'},Asia:{t:'Asia'},Africa:{t:'Africa'},Americas:{t:'Americas & Oceania'}};
 
-let S={screen:'menu',mode:'names',count:10,rounds3:5,game3:[],diff:'medium',region:'world',layout:'auto',pairs:[],cur:0,picks:[],busy:false};
+let S={screen:'menu',mode:'names',count:10,rounds3:5,game3:[],diff:'easy',region:'world',layout:'auto',pairs:[],cur:0,picks:[],busy:false};
 try{const s=JSON.parse(localStorage.getItem('wib_settings')||'{}');['mode','count','diff','region','layout','rounds3'].forEach(k=>{if(s[k]!==undefined)S[k]=s[k]});}catch(e){}
 if(!MODES[S.mode])S.mode='names';
 function saveSettings(){try{localStorage.setItem('wib_settings',JSON.stringify({mode:S.mode,count:S.count,diff:S.diff,region:S.region,layout:S.layout,rounds3:S.rounds3}))}catch(e){}}
