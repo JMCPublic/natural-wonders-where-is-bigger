@@ -702,6 +702,7 @@ const TEST=/\bClaude\//.test(navigator.userAgent);
 const GAME=((location.pathname.match(/natural-wonders-([a-z-]+)/)||[])[1]||'other').replace(/-/g,'_'); // underscores keep Firestore field names simple
 const HOUR=(()=>{try{return 'h'+new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',hour:'2-digit',hourCycle:'h23'}).format(new Date()).slice(0,2)}catch(e){return 'h'+String(new Date().getHours()).padStart(2,'0')}})();
 const DEV=(()=>{try{const coarse=matchMedia('(pointer:coarse)').matches,s=Math.min(screen.width,screen.height);return !coarse?'desktop':s>=600?'tablet':'phone'}catch(e){return 'desktop'}})();
+const DAY=(()=>{try{const p=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()),g=t=>p.find(x=>x.type===t).value;return g('year')+'-'+g('month')+'-'+g('day')}catch(e){return new Date().toISOString().slice(0,10)}})(); // UK date, e.g. 2026-11-03
 const MONTH=(()=>{try{const p=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',year:'numeric',month:'2-digit'}).formatToParts(new Date());return p.find(x=>x.type==='year').value+'-'+p.find(x=>x.type==='month').value}catch(e){const d=new Date();return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')}})();
 const TZ={'Europe/London':'GB','Europe/Belfast':'GB','Europe/Dublin':'IE','Europe/Paris':'FR','Europe/Berlin':'DE','Europe/Madrid':'ES','Europe/Rome':'IT','Europe/Amsterdam':'NL','Europe/Brussels':'BE','Europe/Lisbon':'PT','Europe/Zurich':'CH','Europe/Vienna':'AT','Europe/Stockholm':'SE','Europe/Oslo':'NO','Europe/Copenhagen':'DK','Europe/Helsinki':'FI','Europe/Warsaw':'PL','Europe/Prague':'CZ','Europe/Athens':'GR','America/New_York':'US','America/Chicago':'US','America/Denver':'US','America/Phoenix':'US','America/Los_Angeles':'US','America/Toronto':'CA','America/Vancouver':'CA','Australia/Sydney':'AU','Australia/Melbourne':'AU','Australia/Brisbane':'AU','Australia/Perth':'AU','Australia/Adelaide':'AU','Australia/Hobart':'AU','Pacific/Auckland':'NZ','Asia/Tokyo':'JP','Asia/Singapore':'SG','Asia/Kuala_Lumpur':'MY','Asia/Hong_Kong':'HK','Asia/Kolkata':'IN','Asia/Calcutta':'IN','Asia/Dubai':'AE','Africa/Johannesburg':'ZA'};
 function country(){let tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(TZ[tz])return TZ[tz];
@@ -709,14 +710,14 @@ function country(){let tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().time
 async function commit(id,fields){try{await fetch(`${BASE}:commit?key=${K}`,{method:'POST',headers:{'Content-Type':'application/json'},
   body:JSON.stringify({writes:[{transform:{document:`projects/${P}/databases/(default)/documents/stats/${id}`,fieldTransforms:Object.entries(fields).map(([f,n])=>({fieldPath:f,increment:{integerValue:String(n)}}))}}]})})}catch(e){}}
 // all-time record first, then this month's, sent separately so one can't block the other
-async function bump(f,m){if(!LIVE)return;await commit('wonders',f);if(MONTH>='2026-11')await commit('wonders-'+MONTH,m||f)}
+async function bump(f,m,d){if(!LIVE)return;await commit('wonders',f);if(MONTH>='2026-11'){await commit('wonders-'+MONTH,m||f);await commit('wonders-'+DAY,d||m||f)}}
 const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
 // a visit: once per game per browser session
 let counted=false;try{counted=sessionStorage.getItem('nw-visit-'+GAME)==='1';sessionStorage.setItem('nw-visit-'+GAME,'1')}catch(e){}
 if(!counted){
   if(TEST)bump({tests:1});
-  else{const vip=ls('ap-vip')==='1',seen=ls('nw-seen')==='1',seenM=ls('nw-seen-'+MONTH)==='1';ls('nw-seen','1');ls('nw-seen-'+MONTH,'1');
-    const f={visits:1,['countries.'+country()]:1,['byGame.'+GAME]:1,['hours.'+HOUR]:1,['device.'+DEV]:1};if(vip)f.vip=1;const m={...f};if(!seen)f.uniques=1;if(!seenM)m.uniques=1;bump(f,m)}}
+  else{const vip=ls('ap-vip')==='1',seen=ls('nw-seen')==='1',seenM=ls('nw-seen-'+MONTH)==='1',seenD=ls('nw-seen-'+DAY)==='1';ls('nw-seen','1');ls('nw-seen-'+MONTH,'1');ls('nw-seen-'+DAY,'1');
+    const f={visits:1,['countries.'+country()]:1,['byGame.'+GAME]:1,['hours.'+HOUR]:1,['device.'+DEV]:1};if(vip)f.vip=1;const m={...f},d={...f};if(!seen)f.uniques=1;if(!seenM)m.uniques=1;if(!seenD)d.uniques=1;bump(f,m,d)}}
 // a finished game: the results score appears
 let done=false;
 setInterval(()=>{const big=document.querySelector('.big');if(!big){done=false;return}
