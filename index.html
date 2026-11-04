@@ -572,7 +572,7 @@ html.nwfit-on .rank{overflow:hidden}
 (()=>{
 let busy=false,queued=false;
 const H=()=>window.visualViewport?Math.round(visualViewport.height):innerHeight;
-function tbarH(){const t=document.querySelector('.tbar');if(!t)return 0;const s=getComputedStyle(t);if(s.display==='none'||s.visibility==='hidden'||t.offsetHeight===0)return 0;const r=t.getBoundingClientRect();return r.top<H()?Math.ceil(H()-r.top):0}
+function tbarH(){let m=0;document.querySelectorAll('.tbar,#tmgAd.fixed').forEach(t=>{const s=getComputedStyle(t);if(s.display==='none'||s.visibility==='hidden'||t.offsetHeight===0)return;const r=t.getBoundingClientRect();if(r.top<H())m=Math.max(m,Math.ceil(H()-r.top))});return m}
 function zoomKids(el,z){[...el.children].forEach(c=>{c.style.zoom=z===1?'':z})}
 function fit(){busy=true;const root=document.documentElement;
   const play=[...document.querySelectorAll('.play')].find(p=>p.offsetParent&&p.querySelector('.board,.pair,.grid5,.plist'));
@@ -785,5 +785,6 @@ if(document.body)wire();else addEventListener('DOMContentLoaded',wire);
 })();
 </script>
 <!-- /tmg-feedback -->
+<script src="/shared/adbox.js" defer></script>
 </body>
 </html>
