@@ -161,6 +161,7 @@ rep("{n:'Where is Bigger?',slug:'where-is-bigger',ic:'bigger',t:'Two countries s
 rep('/^Play again$/','/^Nochmal spielen$/')
 rep("Try next${rec.games[n.slug]?' · your lowest score':' · not played yet'}","Als Nächstes${rec.games[n.slug]?' · dein schwächstes Ergebnis':' · noch nicht gespielt'} · auf Englisch")
 rep('<span class="go">Play →</span>','<span class="go">Spielen →</span>')
+rep('<b>${done} of ${GAMES.length}</b>','<b>${done} von ${GAMES.length}</b>')
 rep('</b> Natural Wonders explored</span><a href="/wonders/#record">Your record →</a>','</b> Natural Wonders entdeckt</span><a href="/wonders/#record">Deine Bestwerte →</a>')
 # ---- feedback box ----
 FB=[("[['idea','💡 Idea','What would make it better?'],['like','👍 Like it','What did you enjoy?'],['wrong','🐞 Something’s wrong','What went wrong, and where?']]","[['idea','💡 Idee','Was würde es besser machen?'],['like','👍 Gefällt mir','Was hat dir gefallen?'],['wrong','🐞 Etwas stimmt nicht','Was ist schiefgegangen, und wo?']]"),

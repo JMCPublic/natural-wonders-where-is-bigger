@@ -17,7 +17,7 @@
 <meta property="og:locale" content="de_DE"><meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" hreflang="en" href="https://twominute.games/natural-wonders-where-is-bigger/">
 <link rel="alternate" hreflang="de" href="https://twominute.games/natural-wonders-where-is-bigger/de/">
-<script>/* someone who chose German before goes straight to it */try{if(document.documentElement.lang==='en'&&localStorage.getItem('tmg-lang')==='de'&&!/[?&](via|lang)=/.test(location.search))location.replace('/natural-wonders-where-is-bigger/de/'+location.search)}catch(e){}</script>
+<script>/* someone who chose German before goes straight to it */try{var l=localStorage.getItem('tmg-lang');if(document.documentElement.lang==='en'&&(l==='de'||l==='tr')&&!/[?&](via|lang)=/.test(location.search))location.replace('/natural-wonders-where-is-bigger/'+l+'/'+location.search)}catch(e){}</script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -696,7 +696,7 @@ function tick(){
     const a=document.createElement('a');a.className='nwnext';a.href=url(n);
     a.innerHTML=`${ic(n.ic)}<div><span class="l">Als Nächstes${rec.games[n.slug]?' · dein schwächstes Ergebnis':' · noch nicht gespielt'} · auf Englisch</span><h3>${n.n}</h3><p>${n.t}</p></div><span class="go">Spielen →</span>`;
     const ex=document.createElement('div');ex.className='nwexp';const done=GAMES.filter(g=>rec.games[g.slug]).length;
-    ex.innerHTML=`<span class="pl">${GAMES.map(g=>`<i class="${rec.games[g.slug]?'y':''}"></i>`).join('')}</span><span><b>${done} of ${GAMES.length}</b> Natural Wonders entdeckt</span><a href="/wonders/#record">Deine Bestwerte →</a>`;
+    ex.innerHTML=`<span class="pl">${GAMES.map(g=>`<i class="${rec.games[g.slug]?'y':''}"></i>`).join('')}</span><span><b>${done} von ${GAMES.length}</b> Natural Wonders entdeckt</span><a href="/wonders/#record">Deine Bestwerte →</a>`;
     row.after(a,ex)}
 }
 let q=false;new MutationObserver(()=>{if(q)return;q=true;setTimeout(()=>{q=false;tick()},30)}).observe(document.body,{childList:true,subtree:true});tick();
@@ -797,7 +797,7 @@ if(document.body)wire();else addEventListener('DOMContentLoaded',wire);
 })();
 </script>
 <!-- /tmg-feedback -->
-<!-- tmg-lang: EN | DE switch, and a one-time German offer for German-language browsers. The German page is built from this file by tools/build_de.py -->
+<!-- tmg-lang: EN | DE | TR switch, and a one-time offer for browsers set to German or Turkish. The German and Turkish pages are built from this file by tools/build_de.py and tools/build_tr.py -->
 <style>
 .tmglang{position:absolute;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));z-index:40;display:flex;align-items:center;gap:2px;background:#fff;border:1.5px solid var(--line,#ddd6c8);border-radius:999px;padding:4px;font-family:inherit;font-weight:600;font-size:13px;line-height:1}
 .tmglang a{color:var(--muted,#6f685d);text-decoration:none;padding:6px 10px;border-radius:999px}
@@ -812,22 +812,24 @@ body:has(.play) .tmgoffer{display:none}
 @media (max-width:599px){.tmgoffer{font-size:14px;gap:8px}.tmgoffer .tx span{display:none}}
 </style>
 <script>
-(()=>{const LANG=document.documentElement.lang==='de'?'de':'en',BASE='/natural-wonders-where-is-bigger/';
+(()=>{const LANGS={en:{dir:'',name:'Language'},de:{dir:'de/',name:'Sprache',flag:'🇩🇪',q:'Auf Deutsch spielen?',s:'Dieses Spiel gibt es auch auf Deutsch.',y:'Ja, bitte',n:'Nein, danke'},tr:{dir:'tr/',name:'Dil',flag:'🇹🇷',q:'Türkçe oynamak ister misin?',s:'Bu oyunun Türkçesi de var.',y:'Evet, lütfen',n:'Hayır, teşekkürler'}};
+const LANG=LANGS[document.documentElement.lang]?document.documentElement.lang:'en',BASE='/natural-wonders-where-is-bigger/';
 const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
 const q=new URLSearchParams(location.search);
-const go=(l,via)=>{ls('tmg-lang',l);location.href=(l==='de'?BASE+'de/':BASE)+'?via='+via};
-if(LANG==='de'&&!ls('tmg-lang'))ls('tmg-lang','de');
+const go=(l,via)=>{ls('tmg-lang',l);location.href=BASE+LANGS[l].dir+'?via='+via};
+if(LANG!=='en'&&!ls('tmg-lang'))ls('tmg-lang',LANG);
 function wire(){
-  const p=document.createElement('nav');p.className='tmglang';p.setAttribute('aria-label',LANG==='de'?'Sprache':'Language');
-  p.innerHTML=`<a href="${BASE}?via=switch" lang="en" ${LANG==='en'?'aria-current="true"':''}>EN</a><a href="${BASE}de/?via=switch" lang="de" ${LANG==='de'?'aria-current="true"':''}>DE</a>`;
+  const p=document.createElement('nav');p.className='tmglang';p.setAttribute('aria-label',LANGS[LANG].name);
+  p.innerHTML=Object.keys(LANGS).map(l=>`<a href="${BASE+LANGS[l].dir}?via=switch" lang="${l}" ${l===LANG?'aria-current="true"':''}>${l.toUpperCase()}</a>`).join('');
   p.querySelectorAll('a').forEach(a=>a.onclick=e=>{e.preventDefault();const l=a.lang;if(l===LANG)return;go(l,'switch')});
   const app=document.getElementById('app');if(app)app.parentNode.insertBefore(p,app);else document.body.appendChild(p);
-  const de=(navigator.languages||[navigator.language||'']).some(l=>/^de\b/i.test(l||''));
-  if(LANG==='en'&&(q.get('langoffer')==='1'||(de&&!ls('tmg-lang')&&!ls('tmg-de-offer')))){
-    const o=document.createElement('div');o.className='tmgoffer';o.setAttribute('role','dialog');o.lang='de';o.setAttribute('aria-label','Auf Deutsch spielen?');
-    o.innerHTML='<span class="fl" aria-hidden="true">🇩🇪</span><span class="tx"><b>Auf Deutsch spielen?</b> <span>Dieses Spiel gibt es auch auf Deutsch.</span></span><button type="button" class="ja">Ja, bitte</button><button type="button" class="x" aria-label="Nein, danke">×</button>';
-    o.querySelector('.ja').onclick=()=>{ls('tmg-de-offer','1');go('de','offer')};
-    o.querySelector('.x').onclick=()=>{ls('tmg-de-offer','1');o.remove()};
+  // one-time offer on the English page for browsers set to a language we have
+  const want=q.get('langoffer')||(navigator.languages||[navigator.language||'']).map(l=>String(l||'').slice(0,2).toLowerCase()).find(l=>l!=='en'&&LANGS[l]);
+  if(LANG==='en'&&LANGS[want]&&want!=='en'&&(q.get('langoffer')||(!ls('tmg-lang')&&!ls('tmg-lang-offer')&&!ls('tmg-de-offer')))){const L=LANGS[want];
+    const o=document.createElement('div');o.className='tmgoffer';o.setAttribute('role','dialog');o.lang=want;o.setAttribute('aria-label',L.q);
+    o.innerHTML=`<span class="fl" aria-hidden="true">${L.flag}</span><span class="tx"><b>${L.q}</b> <span>${L.s}</span></span><button type="button" class="ja">${L.y}</button><button type="button" class="x" aria-label="${L.n}">×</button>`;
+    o.querySelector('.ja').onclick=()=>{ls('tmg-lang-offer','1');go(want,'offer')};
+    o.querySelector('.x').onclick=()=>{ls('tmg-lang-offer','1');o.remove()};
     document.body.appendChild(o)}}
 if(document.body)wire();else addEventListener('DOMContentLoaded',wire);
 })();
