@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Natural Wonders · Where is Bigger?</title>
+<script>/* someone who chose German before goes straight to it */try{if(document.documentElement.lang==='en'&&localStorage.getItem('tmg-lang')==='de'&&!/[?&](via|lang)=/.test(location.search))location.replace('/natural-wonders-where-is-bigger/de/'+location.search)}catch(e){}</script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -225,7 +226,7 @@ html.phone body.timed .p3 .pbar{bottom:calc(64px + env(safe-area-inset-bottom))}
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
-const VERSION='v10';
+const VERSION='v11';
 /* ---------- timer (shared) ---------- */
 const TM={on:true,left:0,secs:15,copper:5,t0:0,iv:null,key:null,onUp:null,
   start(key,secs,copper,onUp){if(!this.on){this.hide();return}if(this.key===key&&this.iv)return;this.stop();this.key=key;this.secs=secs;this.copper=copper;this.onUp=onUp;this.t0=performance.now();this.build();this.draw(secs);
@@ -785,6 +786,42 @@ if(document.body)wire();else addEventListener('DOMContentLoaded',wire);
 })();
 </script>
 <!-- /tmg-feedback -->
+<!-- tmg-lang: EN | DE switch, and a one-time German offer for German-language browsers. The German page is built from this file by tools/build_de.py -->
+<style>
+.tmglang{position:absolute;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));z-index:40;display:flex;align-items:center;gap:2px;background:#fff;border:1.5px solid var(--line,#ddd6c8);border-radius:999px;padding:4px;font-family:inherit;font-weight:600;font-size:13px;line-height:1}
+.tmglang a{color:var(--muted,#6f685d);text-decoration:none;padding:6px 10px;border-radius:999px}
+.tmglang a[aria-current]{background:var(--ink,#16130f);color:#fff}
+body:has(.play) .tmglang{display:none}
+html.phone .tmglang{position:static;width:max-content;margin:max(10px,env(safe-area-inset-top)) 16px 0 auto}
+.tmgoffer{position:fixed;top:max(12px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:70;display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--line,#ddd6c8);border-radius:18px;padding:10px 12px 10px 16px;box-shadow:0 14px 34px -14px rgba(0,0,0,.3);font-family:inherit;font-size:15px;line-height:1.3;width:max-content;max-width:calc(100% - 24px);box-sizing:border-box}
+.tmgoffer .fl{font-size:24px}.tmgoffer .tx{color:var(--muted,#6f685d)}.tmgoffer .tx b{color:var(--ink,#16130f)}
+.tmgoffer .ja{background:var(--ink,#16130f);color:#fff;border:0;border-radius:999px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}
+.tmgoffer .x{background:none;border:0;font-size:22px;line-height:1;color:var(--muted,#6f685d);cursor:pointer;padding:4px}
+body:has(.play) .tmgoffer{display:none}
+@media (max-width:599px){.tmgoffer{font-size:14px;gap:8px}.tmgoffer .tx span{display:none}}
+</style>
+<script>
+(()=>{const LANG=document.documentElement.lang==='de'?'de':'en',BASE='/natural-wonders-where-is-bigger/';
+const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
+const q=new URLSearchParams(location.search);
+const go=(l,via)=>{ls('tmg-lang',l);location.href=(l==='de'?BASE+'de/':BASE)+'?via='+via};
+if(LANG==='de'&&!ls('tmg-lang'))ls('tmg-lang','de');
+function wire(){
+  const p=document.createElement('nav');p.className='tmglang';p.setAttribute('aria-label',LANG==='de'?'Sprache':'Language');
+  p.innerHTML=`<a href="${BASE}?via=switch" lang="en" ${LANG==='en'?'aria-current="true"':''}>EN</a><a href="${BASE}de/?via=switch" lang="de" ${LANG==='de'?'aria-current="true"':''}>DE</a>`;
+  p.querySelectorAll('a').forEach(a=>a.onclick=e=>{e.preventDefault();const l=a.lang;if(l===LANG)return;go(l,'switch')});
+  const app=document.getElementById('app');if(app)app.parentNode.insertBefore(p,app);else document.body.appendChild(p);
+  const de=(navigator.languages||[navigator.language||'']).some(l=>/^de\b/i.test(l||''));
+  if(LANG==='en'&&(q.get('langoffer')==='1'||(de&&!ls('tmg-lang')&&!ls('tmg-de-offer')))){
+    const o=document.createElement('div');o.className='tmgoffer';o.setAttribute('role','dialog');o.lang='de';o.setAttribute('aria-label','Auf Deutsch spielen?');
+    o.innerHTML='<span class="fl" aria-hidden="true">🇩🇪</span><span class="tx"><b>Auf Deutsch spielen?</b> <span>Dieses Spiel gibt es auch auf Deutsch.</span></span><button type="button" class="ja">Ja, bitte</button><button type="button" class="x" aria-label="Nein, danke">×</button>';
+    o.querySelector('.ja').onclick=()=>{ls('tmg-de-offer','1');go('de','offer')};
+    o.querySelector('.x').onclick=()=>{ls('tmg-de-offer','1');o.remove()};
+    document.body.appendChild(o)}}
+if(document.body)wire();else addEventListener('DOMContentLoaded',wire);
+})();
+</script>
+<!-- /tmg-lang -->
 <script src="/shared/adbox.js" defer></script>
 <script src="/shared/reach.js" defer></script>
 </body>
