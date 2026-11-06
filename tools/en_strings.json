@@ -1,0 +1,420 @@
+{
+"reps": [
+[
+"${right}/${total} in ${this.fmt(secs)}",
+1
+],
+[
+"const WALES=20782;",
+1
+],
+[
+"COUNTRIES.filter(c=>UKSET.has(c.id))",
+2
+],
+[
+"COUNTRIES.filter(c=>!UKSET.has(c.id))",
+2
+],
+[
+"const rtxt=r<1.1?`only ${((r-1)*100).toFixed(1)}% bigger`:`${r.toFixed(r<10?1:0)}× bigger`;",
+1
+],
+[
+"${i+1}. ${esc(a.n)} v ${esc(b.n)}",
+1
+],
+[
+"😲 <b>Biggest surprise:</b> ${esc(surprise.big.n)} is ${surprise.r.toFixed(1)}× the size of ${esc(surprise.small.n)}.",
+1
+],
+[
+"🎯 <b>Closest call:</b> ${esc(closest.big.n)} beats ${esc(closest.small.n)} by just ${fmt(closest.big.a-closest.small.a)} km².",
+1
+],
+[
+"'<span class=\"st ok\">✓ Ticked — correct</span>':'<span class=\"st no\">✗ Ticked — but it’s smaller</span>'",
+1
+],
+[
+"'<span class=\"st ok\">✓ Left blank — correct</span>':'<span class=\"st no\">✗ Missed — it’s bigger</span>'",
+1
+],
+[
+"🎯 <b>Closest call:</b> ${esc(closest.c.n)} is ${multTxt(closest.r)} the size of ${esc(closest.t.n)}, and you still got it right.",
+1
+],
+[
+"COUNTRIES.slice().sort((a,b)=>a.n.localeCompare(b.n))",
+1
+],
+[
+"<html lang=\"en\">",
+1
+],
+[
+"<title>Natural Wonders · Where is Bigger?</title>",
+1
+],
+[
+"'Time left for this question'",
+1
+],
+[
+"`${s} second${s===1?'':'s'}`:`${Math.floor(s/60)} min ${s%60} s`",
+1
+],
+[
+"`left the page ${this.left} time${this.left===1?'':'s'}`:'stayed on the page throughout'",
+1
+],
+[
+"<div class=\"label\">Timer</div>",
+1
+],
+[
+"⏱ Timed<small>",
+1
+],
+[
+"No timer<small>Take your time</small>",
+1
+],
+[
+"const fmt=n=>n.toLocaleString('en-GB');",
+1
+],
+[
+"function wales(a){const w=a/WALES;if(Math.abs(w-1)<.005)return 'exactly 1 Wales';if(w>=100)return '≈ '+fmt(Math.round(w))+' Waleses';if(w>=1)return '≈ '+w.toFixed(1)+' Waleses';return '≈ '+(w<.1?w.toFixed(2):w.toFixed(1))+' of a Wales'}",
+1
+],
+[
+"function multTxt(r){return r>=10?Math.round(r)+'×':r>=.1?r.toFixed(1)+'×':r>=.01?r.toFixed(2)+'×':r.toFixed(3)+'×'}",
+1
+],
+[
+"aria-label=\"Country silhouette\"",
+1
+],
+[
+"const MODES={names:{t:'Mode 1 — Silhouette + name',s:'See the shape and the name'},hidden:{t:'Mode 2 — Silhouette only',s:'Just the shape. Names revealed at the end'}};",
+1
+],
+[
+"const DIFFS3T={easy:{t:'Easy',s:'Giants and tiddlers'},medium:{t:'Medium',s:'1.3× to 3× the target'},hard:{t:'Hard',s:'Close to the target’s size'}};",
+1
+],
+[
+"const DIFFS={easy:{t:'Easy',s:'2× to 8× apart',lo:2,hi:8},medium:{t:'Medium',s:'1.3× to 2.2× apart',lo:1.3,hi:2.2},hard:{t:'Hard',s:'Within 35% of each other',lo:1.03,hi:1.35}};",
+1
+],
+[
+"const REGIONS={world:{t:'Whole world',s:'Mixed from every continent'},home:{t:'Home nations',s:'England, Scotland, Wales, NI or UK v the world'},Europe:{t:'Europe'},Asia:{t:'Asia'},Africa:{t:'Africa'},Americas:{t:'Americas & Oceania'}};",
+1
+],
+[
+"const LAYOUTS={auto:'Auto',phone:'Phone',tablet:'Tablet',desktop:'Desktop'};",
+1
+],
+[
+"<b>Natural Wonders</b> · Game 8 of 10 · <a href=\"https://twominute.games/wonders/\">All games</a>",
+1
+],
+[
+"<h1>Where is Bigger?</h1>",
+3
+],
+[
+"Which covers more land? Make all your guesses, then see the real sizes at the end. Prepare to be surprised.",
+1
+],
+[
+"<div class=\"label\">Game mode</div>",
+1
+],
+[
+"<div class=\"label\">Number of rounds</div>",
+1
+],
+[
+"<div class=\"label\">Number of pairs</div>",
+1
+],
+[
+"${n} rounds<small>${n*5} answers</small>",
+1
+],
+[
+"${n} pairs</button>",
+1
+],
+[
+"TM.menuRow('30 seconds a round')",
+1
+],
+[
+"<div class=\"label\">Difficulty</div>",
+1
+],
+[
+"<div class=\"label\">Countries from</div>",
+1
+],
+[
+"Start — ${S.mode==='bigger'?S.rounds3+' rounds':S.count+' pairs'}",
+1
+],
+[
+"<p class=\"foot\">Layout <span class=\"lay\">",
+1
+],
+[
+"${COUNTRIES.length} countries · areas are total area in km² (land plus inland water) · Natural Wonders: Where is Bigger ${VERSION} · <button class=\"srclink\" onclick=\"openSources()\">Sources</button>",
+1
+],
+[
+"toast('Not enough countries for that combination. Try another region.')",
+1
+],
+[
+"toast('Not enough countries for that combination. Try fewer pairs or another region.')",
+1
+],
+[
+"aria-label=\"Pick ${named?esc(c.n):'country '+k}\"",
+1
+],
+[
+"${side?'→':'←'} key</span>",
+1
+],
+[
+"<button class=\"link\" onclick=\"back()\">← Previous pair</button>",
+1
+],
+[
+"<button class=\"link\" onclick=\"back()\">← Previous round</button>",
+1
+],
+[
+"<button class=\"link\" onclick=\"quit()\">Quit</button>",
+2
+],
+[
+"Which is bigger?<span>Pair ${S.cur+1} of ${S.pairs.length}</span>",
+1
+],
+[
+"Shapes are not drawn to scale. Each one is stretched to fill its box.",
+1
+],
+[
+"${ok?'✓ You got it':S.picks[i]==null?'⏱ Time ran out':'✗ You picked '+esc(p[S.picks[i]].n)}",
+1
+],
+[
+"<span class=\"tstat\">${S.times[i].toFixed(1)} s</span>",
+1
+],
+[
+"<b>${esc(big.n)}</b> is ${rtxt} than <b>${esc(small.n)}</b>",
+1
+],
+[
+"' · capital '+esc(",
+2
+],
+[
+"😲 <b>Biggest surprise:</b> ${esc(surprise.c.n)} is ${surprise.r>1?multTxt(surprise.r)+' the size of':'only '+multTxt(surprise.r)+' the size of'} ${esc(surprise.t.n)}.",
+1
+],
+[
+"<h1>Results</h1>",
+2
+],
+[
+"onclick=\"startGame()\">Play again</button>",
+2
+],
+[
+"onclick=\"quit()\">Change settings</button>",
+2
+],
+[
+">Share score</button>",
+2
+],
+[
+"<button class=\"btn ghost\" onclick=\"openSources()\">Sources</button>",
+1
+],
+[
+"href=\"https://twominute.games/wonders/\">More games</a>",
+1
+],
+[
+"The answers, drawn to the same scale (bigger country in black)",
+1
+],
+[
+"aria-label=\"Both countries drawn to the same scale\"",
+1
+],
+[
+"Areas: CIA World Factbook (final edition, total area); England, Scotland, Wales and Northern Ireland: Office for National Statistics. Outlines: Natural Earth. <button class=\"srclink\" onclick=\"openSources()\">See all sources</button>",
+2
+],
+[
+"<div class=\"slabel\">Round ${ri+1}</div><h3>Bigger than ${esc(t.n)}?</h3>",
+1
+],
+[
+"'Time ran out: your ticks were locked in as they stood':'Answered in '+R.secs.toFixed(1)+' s'",
+1
+],
+[
+"aria-label=\"All six countries drawn to the same scale\"",
+1
+],
+[
+"All six drawn to the same scale",
+1
+],
+[
+"${S.game3.length} rounds ·",
+1
+],
+[
+"<div class=\"label\" style=\"margin-top:28px\">Round by round</div>",
+1
+],
+[
+"' Keys A–E tick, Enter locks in.'",
+1
+],
+[
+">Lock in answer<",
+1
+],
+[
+">Lock in<",
+1
+],
+[
+">The one to beat<",
+2
+],
+[
+">Your answer<",
+2
+],
+[
+"'None ticked'",
+1
+],
+[
+"Round ${S.cur+1} of ",
+2
+],
+[
+"Tick all that apply. It could be none, it could be all five.",
+1
+],
+[
+"Which are bigger than <em>",
+1
+],
+[
+"Which of these are bigger than <em>",
+1
+],
+[
+"const t=`Natural Wonders: Where is Bigger. I scored ${r}/${n} (${S.mode==='bigger'?'Bigger than…, ':''}${DIFFS[S.diff].t}, ${REGIONS[S.region].t}). Can you beat me?`;",
+1
+],
+[
+"toast('Score copied. Paste it to a friend.')",
+1
+],
+[
+"aria-label=\"Sources\"><button class=\"srcx\" onclick=\"closeSources()\">Close</button>",
+1
+],
+[
+"<h2>Sources</h2>",
+1
+],
+[
+"<h3>Every country and its area</h3><details><summary>${COUNTRIES.length} countries</summary>",
+1
+],
+[
+"setAttribute('aria-label','Switch game')",
+1
+],
+[
+"<a class=\"home\" href=\"/wonders/\">← All games</a>",
+1
+],
+[
+"{n:'Where is Bigger?',slug:'where-is-bigger',ic:'bigger',t:'Two countries side by side. Which covers more land? Maps have been fooling you for years.'}",
+1
+],
+[
+"/^Play again$/",
+1
+],
+[
+"Try next${rec.games[n.slug]?' · your lowest score':' · not played yet'}",
+1
+],
+[
+"<span class=\"go\">Play →</span>",
+1
+],
+[
+"<b>${done} of ${GAMES.length}</b>",
+1
+],
+[
+"</b> Natural Wonders explored</span><a href=\"/wonders/#record\">Your record →</a>",
+1
+]
+],
+"V": [
+"'Perfect score. Cartographer level.'",
+"'Excellent. You know your maps.'",
+"'Solid effort. A few surprises in there.'",
+"'The map has fooled you a bit.'",
+"'Shapes can be very deceiving!'"
+],
+"SRC": [
+"The figures in this game were taken in good faith from the published sources below in October 2026 and are shown exactly as those sources give them. Different reputable sources measure areas in slightly different ways (for example whether lakes, rivers and coastal waters are included), so you may find other figures elsewhere, and a source can occasionally be wrong. If you think a figure is wrong, this is where it came from.",
+"<h3>Country areas</h3>",
+", total area (land plus inland water), from its final edition. The CIA stopped publishing the Factbook in February 2026; its data is preserved in the public",
+"factbook.json archive</a>",
+"France uses the Factbook's figure for metropolitan France (551,500 km²), to match the outline shown, which leaves out overseas regions such as French Guiana.",
+"Morocco is not included: the Factbook's figure includes the disputed territory of Western Sahara, so the figure and the outline would not match.",
+"<h3>England, Scotland, Wales and Northern Ireland</h3>",
+", Standard Area Measurements, as given on",
+": England 130,462 km², Scotland 78,803 km², Wales 20,782 km², Northern Ireland 14,333 km². “Waleses” use Wales at 20,782 km².",
+"<h3>Capitals</h3>",
+"The open “world-countries” dataset by Mohammed Le Doze (",
+"<h3>Maps</h3>",
+"Country outlines:",
+" (1:10m, public domain). Remote overseas territories are left off the outlines."
+],
+"FB": [
+"[['idea','💡 Idea','What would make it better?'],['like','👍 Like it','What did you enjoy?'],['wrong','🐞 Something’s wrong','What went wrong, and where?']]",
+"aria-label=\"Feedback or report a problem\"><h2>Tell us what you think</h2>",
+"Ideas, likes, gripes or something broken. It goes privately to Two Minute Games; nobody else can read it.",
+"aria-label=\"Your message\"",
+"placeholder=\"Name or email, only if you’d like a reply (optional)\" aria-label=\"Name or email (optional)\"",
+"We also send which game you were on and your type of device, nothing else.",
+"<button type=\"button\" class=\"tmgfb-b\">Cancel</button><button type=\"submit\" class=\"tmgfb-b go\">Send</button>",
+"m.textContent='Sending…'",
+"m.textContent='Thank you. Sent!'",
+"m.textContent='Couldn’t send just now. Please try again in a moment.'",
+"p.setAttribute('aria-label','Feedback or report a problem');p.innerHTML=ICON+'Feedback or bug'"
+]
+}

@@ -17,7 +17,7 @@
 <meta property="og:locale" content="de_DE"><meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" hreflang="en" href="https://twominute.games/natural-wonders-where-is-bigger/">
 <link rel="alternate" hreflang="de" href="https://twominute.games/natural-wonders-where-is-bigger/de/">
-<script>/* someone who chose German before goes straight to it */try{var l=localStorage.getItem('tmg-lang');if(document.documentElement.lang==='en'&&(l==='de'||l==='tr')&&!/[?&](via|lang)=/.test(location.search))location.replace('/natural-wonders-where-is-bigger/'+l+'/'+location.search)}catch(e){}</script>
+<script>/* someone who chose German before goes straight to it */try{var l=localStorage.getItem('tmg-lang');if(document.documentElement.lang==='en'&&/^(de|tr|fr|es)$/.test(l||'')&&!/[?&](via|lang)=/.test(location.search))location.replace('/natural-wonders-where-is-bigger/'+l+'/'+location.search)}catch(e){}</script>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -236,7 +236,7 @@ html.phone body.timed .p3 .pbar{bottom:calc(64px + env(safe-area-inset-bottom))}
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
-const VERSION='v13';
+const VERSION='v14';
 /* ---------- timer (shared) ---------- */
 const TM={on:true,left:0,secs:15,copper:5,t0:0,iv:null,key:null,onUp:null,
   start(key,secs,copper,onUp){if(!this.on){this.hide();return}if(this.key===key&&this.iv)return;this.stop();this.key=key;this.secs=secs;this.copper=copper;this.onUp=onUp;this.t0=performance.now();this.build();this.draw(secs);
@@ -272,10 +272,10 @@ const COUNTS=[10,15,20];
 const DIFFS={easy:{t:'Leicht',s:'2- bis 8-mal so groß',lo:2,hi:8},medium:{t:'Mittel',s:'1,3- bis 2,2-mal so groß',lo:1.3,hi:2.2},hard:{t:'Schwer',s:'Höchstens 35 % Unterschied',lo:1.03,hi:1.35}};
 const REGIONS={world:{t:'Ganze Welt',s:'Gemischt von allen Kontinenten'},home:{t:'Deutschsprachige Länder',s:'Deutschland, Österreich, die Schweiz und Luxemburg gegen die Welt'},Europe:{t:'Europa'},Asia:{t:'Asien'},Africa:{t:'Afrika'},Americas:{t:'Amerika & Ozeanien'}};
 
-let S={screen:'menu',mode:'names',count:10,rounds3:5,game3:[],diff:'easy',region:'world',layout:'auto',pairs:[],cur:0,picks:[],busy:false};
-try{const s=JSON.parse(localStorage.getItem('wib_settings')||'{}');['mode','count','diff','region','layout','rounds3'].forEach(k=>{if(s[k]!==undefined)S[k]=s[k]});}catch(e){}
+let S={screen:'menu',mode:'names',count:10,rounds3:5,game3:[],diff:'easy',region:'home',layout:'auto',pairs:[],cur:0,picks:[],busy:false};
+try{const s=JSON.parse(localStorage.getItem('wib_settings_de')||'{}');['mode','count','diff','region','layout','rounds3'].forEach(k=>{if(s[k]!==undefined)S[k]=s[k]});}catch(e){}
 if(!MODES[S.mode])S.mode='names';
-function saveSettings(){try{localStorage.setItem('wib_settings',JSON.stringify({mode:S.mode,count:S.count,diff:S.diff,region:S.region,layout:S.layout,rounds3:S.rounds3}))}catch(e){}}
+function saveSettings(){try{localStorage.setItem('wib_settings_de',JSON.stringify({mode:S.mode,count:S.count,diff:S.diff,region:S.region,layout:S.layout,rounds3:S.rounds3}))}catch(e){}}
 
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const ratio=(a,b)=>Math.max(a.a,b.a)/Math.min(a.a,b.a);
@@ -797,7 +797,7 @@ if(document.body)wire();else addEventListener('DOMContentLoaded',wire);
 })();
 </script>
 <!-- /tmg-feedback -->
-<!-- tmg-lang: EN | DE | TR switch, and a one-time offer for browsers set to German or Turkish. The German and Turkish pages are built from this file by tools/build_de.py and tools/build_tr.py -->
+<!-- tmg-lang: EN | DE | TR | FR | ES switch, and a one-time offer for browsers set to one of those languages. The translated pages are built from this file by tools/build_de.py, build_tr.py, build_fr.py and build_es.py -->
 <style>
 .tmglang{position:absolute;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));z-index:40;display:flex;align-items:center;gap:2px;background:#fff;border:1.5px solid var(--line,#ddd6c8);border-radius:999px;padding:4px;font-family:inherit;font-weight:600;font-size:13px;line-height:1}
 .tmglang a{color:var(--muted,#6f685d);text-decoration:none;padding:6px 10px;border-radius:999px}
@@ -812,7 +812,7 @@ body:has(.play) .tmgoffer{display:none}
 @media (max-width:599px){.tmgoffer{font-size:14px;gap:8px}.tmgoffer .tx span{display:none}}
 </style>
 <script>
-(()=>{const LANGS={en:{dir:'',name:'Language'},de:{dir:'de/',name:'Sprache',flag:'🇩🇪',q:'Auf Deutsch spielen?',s:'Dieses Spiel gibt es auch auf Deutsch.',y:'Ja, bitte',n:'Nein, danke'},tr:{dir:'tr/',name:'Dil',flag:'🇹🇷',q:'Türkçe oynamak ister misin?',s:'Bu oyunun Türkçesi de var.',y:'Evet, lütfen',n:'Hayır, teşekkürler'}};
+(()=>{const LANGS={en:{dir:'',name:'Language'},de:{dir:'de/',name:'Sprache',flag:'🇩🇪',q:'Auf Deutsch spielen?',s:'Dieses Spiel gibt es auch auf Deutsch.',y:'Ja, bitte',n:'Nein, danke'},tr:{dir:'tr/',name:'Dil',flag:'🇹🇷',q:'Türkçe oynamak ister misin?',s:'Bu oyunun Türkçesi de var.',y:'Evet, lütfen',n:'Hayır, teşekkürler'},fr:{dir:'fr/',name:'Langue',flag:'🇫🇷',q:'Jouer en français ?',s:'Ce jeu existe aussi en français.',y:'Oui, merci',n:'Non, merci'},es:{dir:'es/',name:'Idioma',flag:'🌎',q:'¿Jugar en español?',s:'Este juego también está en español.',y:'Sí, por favor',n:'No, gracias'}};
 const LANG=LANGS[document.documentElement.lang]?document.documentElement.lang:'en',BASE='/natural-wonders-where-is-bigger/';
 const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
 const q=new URLSearchParams(location.search);
