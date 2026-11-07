@@ -876,7 +876,7 @@ const dev=()=>{const c=matchMedia('(pointer:coarse)').matches,m=Math.min(screen.
 const screenNow=()=>document.querySelector('#app .play')||document.querySelector('.play')?'play':document.querySelector('#app .score')?'results':'start';
 // the short bits of text on the screen the player was looking at, so they can point at the one that is wrong
 function phrases(){const app=document.getElementById('app')||document.body,out=[],seen=new Set();
-  const w=document.createTreeWalker(app,NodeFilter.SHOW_TEXT,{acceptNode:n=>{const p=n.parentElement;if(!p||p.closest('script,style,svg,.tmgho-p'))return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT}});
+  const w=document.createTreeWalker(app,NodeFilter.SHOW_TEXT,{acceptNode:n=>{const p=n.parentElement;if(!p||p.closest('script,style,svg,.tmgho-p,.tmgho-f,.nwsw,nav'))return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT}});
   let n;while((n=w.nextNode())&&out.length<16){const pe=n.parentElement;let t=(pe.children.length?n.textContent:pe.textContent).replace(/\s+/g,' ').trim();
     if(t.length<2||t.length>90||!/\p{L}{2}/u.test(t)||seen.has(t))continue;seen.add(t);out.push(t)}
   return out}
