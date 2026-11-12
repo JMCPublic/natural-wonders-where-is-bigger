@@ -236,7 +236,7 @@ html.phone body.timed .p3 .pbar{bottom:calc(64px + env(safe-area-inset-bottom))}
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
-const VERSION='v16';
+const VERSION='v17';
 /* ---------- timer (shared) ---------- */
 const TM={on:true,left:0,secs:15,copper:5,t0:0,iv:null,key:null,onUp:null,
   start(key,secs,copper,onUp){if(!this.on){this.hide();return}if(this.key===key&&this.iv)return;this.stop();this.key=key;this.secs=secs;this.copper=copper;this.onUp=onUp;this.t0=performance.now();this.build();this.draw(secs);
@@ -563,6 +563,7 @@ html.phone.nwfit-on .board>.mapcard{height:auto;flex:1 1 0;min-height:0;margin-b
 html.phone.nwfit-on .board>.rank{flex:none;overflow:hidden}
 html.nwfit-on .rank{overflow:hidden}
 /* tighter spacing when the window is short, before anything has to shrink */
+@media (max-height:600px){html.phone.nwfit-on .q .note{display:none}}
 @media (max-height:760px){
  html.phone.nwfit-on .slot{min-height:38px;padding:3px 10px}
  html.phone.nwfit-on .slots{gap:5px}
@@ -589,6 +590,8 @@ function zoomKids(el,z){[...el.children].forEach(c=>{c.style.zoom=z===1?'':z})}
 function fit(){busy=true;const root=document.documentElement;
   const play=[...document.querySelectorAll('.play')].find(p=>p.offsetParent&&p.querySelector('.board,.pair,.grid5,.plist'));
   if(!play){root.classList.remove('nwfit-on');busy=false;return}
+  // a screen already found too tall for this phone keeps normal scrolling until the next round
+  if(play.dataset.nofit){root.classList.remove('nwfit-on');busy=false;return}
   root.classList.add('nwfit-on');window.scrollTo(0,0);
   const phone=root.classList.contains('phone');
   // the play area runs from where it starts down to the timer bar (or the bottom of the window)
@@ -599,10 +602,21 @@ function fit(){busy=true;const root=document.documentElement;
   if(board&&rank){
     zoomKids(rank,1);
     if(phone){
-      // phone: answers keep their natural size; the map gives up space, down to a sensible minimum
-      const bh=board.clientHeight,minMap=Math.max(110,Math.min(240,bh*.3));
+      // phone: answers keep their natural size; the map gives up space, down to a sensible minimum.
+      // Heights are set in pixels here: older iPhone Safari squashes the map to nothing if flexbox is left to share the space.
+      const mc=board.querySelector(':scope>.mapcard');
+      const bh=Math.max(0,Math.floor(play.getBoundingClientRect().bottom-board.getBoundingClientRect().top));
+      board.style.height=bh+'px';
+      const minMap=Math.max(H()<600?90:110,Math.min(240,bh*.3));
       const need=rank.scrollHeight,room=bh-minMap-8;
       if(need>room){const z=Math.max(.78,room/need);zoomKids(rank,z)}
+      const rh=Math.ceil(rank.getBoundingClientRect().height);
+      if(rh>bh-minMap-8+2){
+        // still too tall even shrunk (a very small phone): give the page back its normal scrolling, so the answers and
+        // the lock-in button can always be reached
+        zoomKids(rank,1);board.style.height='';play.style.height='';if(mc){mc.style.flex='';mc.style.removeProperty('height')}
+        play.dataset.nofit='1';root.classList.remove('nwfit-on');busy=false;return}
+      if(mc){mc.style.flex='none';mc.style.setProperty('height',(bh-rh-8)+'px','important')}
     }else{
       // desktop: the answer panel never scrolls; if it is short of room, its contents shrink to fit
       const cs=getComputedStyle(rank),p=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);
@@ -617,7 +631,7 @@ function fit(){busy=true;const root=document.documentElement;
 function soon(){if(busy){queued=true;return}setTimeout(fit,16)}
 new MutationObserver(m=>{if(m.some(x=>x.type==='childList'))soon()}).observe(document.body,{childList:true,subtree:true});
 addEventListener('resize',soon);if(window.visualViewport)visualViewport.addEventListener('resize',soon);
-addEventListener('orientationchange',()=>setTimeout(soon,250));
+addEventListener('orientationchange',()=>{document.querySelectorAll('[data-nofit]').forEach(e=>delete e.dataset.nofit);setTimeout(soon,250)});
 if(document.fonts)document.fonts.ready.then(soon);soon();
 })();
 </script>
