@@ -665,7 +665,7 @@ bigger:`<path d="M6 10 L30 6 L36 20 L28 38 L10 36 L4 22Z" fill="${L}"/><text x="
 five:`<path d="M2 8 L24 6 L28 22 L20 38 L4 36Z" fill="#b8663a"/><g fill="${L}"><rect x="36" y="6" width="12" height="12" rx="2"/><rect x="52" y="6" width="9" height="9" rx="2"/><rect x="66" y="6" width="15" height="15" rx="2"/><rect x="38" y="26" width="7" height="7" rx="2"/><rect x="54" y="25" width="13" height="13" rx="2"/></g>`,
 forests:`<g fill="${L}"><path d="M10 40 L20 8 L30 40Z"/><path d="M28 40 L40 4 L52 40Z"/><path d="M50 40 L60 14 L70 40Z"/><path d="M64 40 L73 18 L82 40Z"/></g>`};
 const GAMES=[
-{n:'Rivers',slug:'rivers',ic:'rivers',t:'Put the world’s great rivers in order of length. The Nile or the Amazon? The answers might surprise you.'},
+{n:"Nehirler",slug:'rivers',ic:'rivers',t:"Dünyanın büyük nehirlerini uzunluklarına göre sırala. Nil mi, Amazon mu? Cevaplar seni şaşırtabilir."},
 {n:'Lakes',slug:'lakes',ic:'lakes',t:'Rank lakes by area, depth or length. Each round tells you which, so read the question first.'},
 {n:'Bodies of Water',slug:'bodies-of-water',ic:'water',t:'A sea, strait or lake lights up on the map. Can you name it from five?'},
 {n:'Mountains',slug:'mountains',ic:'mountains',t:'Line up the peaks by height and watch the skyline reveal the order, or name the marked summit.'},
@@ -677,7 +677,7 @@ const GAMES=[
 {n:'Forests',slug:'forests',ic:'forests',t:'From the Amazon to Sherwood. Rank the world’s forests by area, or name the one marked on the map.'}];
 const here=(location.pathname.match(/natural-wonders-([a-z-]+)/)||[])[1];
 const cur=GAMES.findIndex(g=>g.slug===here);if(cur<0)return;
-const url=g=>'/natural-wonders-'+g.slug+'/';
+const TRL={'where-is-bigger':1,'rivers':1};const url=g=>'/natural-wonders-'+g.slug+'/'+(TRL[g.slug]?'tr/':'');
 const KEY='nw_record';
 const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{games:{}}}catch(e){return{games:{}}}};
 const save=r=>{try{localStorage.setItem(KEY,JSON.stringify(r))}catch(e){}};
@@ -699,7 +699,7 @@ function tick(){
   const again=[...document.querySelectorAll('button,a')].find(b=>/^Tekrar oyna$/.test(b.textContent.trim()));
   if(again&&!document.querySelector('.nwnext')){const rec=load(),n=nextGame(rec);if(!n)return;const row=again.closest('.row')||again.parentNode;
     const a=document.createElement('a');a.className='nwnext';a.href=url(n);
-    a.innerHTML=`${ic(n.ic)}<div><span class="l">Sıradaki${rec.games[n.slug]?' · en düşük skorun':' · henüz oynanmadı'} · İngilizce</span><h3>${n.n}</h3><p>${n.t}</p></div><span class="go">Oyna →</span>`;
+    a.innerHTML=`${ic(n.ic)}<div><span class="l">Sıradaki${rec.games[n.slug]?' · en düşük skorun':' · henüz oynanmadı'}${TRL[n.slug]?'':' · İngilizce'}</span><h3>${n.n}</h3><p>${n.t}</p></div><span class="go">Oyna →</span>`;
     const ex=document.createElement('div');ex.className='nwexp';const done=GAMES.filter(g=>rec.games[g.slug]).length;
     ex.innerHTML=`<span class="pl">${GAMES.map(g=>`<i class="${rec.games[g.slug]?'y':''}"></i>`).join('')}</span><span><b>${done} / ${GAMES.length}</b> Natural Wonders keşfedildi</span><a href="/wonders/#record">Rekorların →</a>`;
     row.after(a,ex)}
