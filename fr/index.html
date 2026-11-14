@@ -236,7 +236,7 @@ html.phone body.timed .p3 .pbar{bottom:calc(64px + env(safe-area-inset-bottom))}
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
-const VERSION='v17';
+const VERSION='v18';
 /* ---------- timer (shared) ---------- */
 const TM={on:true,left:0,secs:15,copper:5,t0:0,iv:null,key:null,onUp:null,
   start(key,secs,copper,onUp){if(!this.on){this.hide();return}if(this.key===key&&this.iv)return;this.stop();this.key=key;this.secs=secs;this.copper=copper;this.onUp=onUp;this.t0=performance.now();this.build();this.draw(secs);
@@ -628,7 +628,11 @@ function fit(){busy=true;const root=document.documentElement;
     }
   }else{
     // games without a separate answer panel: shrink the whole board a little if it cannot fit
+    // phones with the five-country list: always scroll normally (it never fits a phone well, and iPhone Safari could leave it stuck)
+    if(phone&&play.querySelector('.plist')){play.style.height='';play.style.overflow='';play.dataset.nofit='1';root.classList.remove('nwfit-on');busy=false;return}
     zoomKids(play,1);play.style.overflow='hidden';const over=play.scrollHeight-play.clientHeight;if(over>1){const z=Math.max(.7,play.clientHeight/play.scrollHeight);zoomKids(play,z)}
+    // still too tall even shrunk: give the page back its normal scrolling so every answer and the lock-in button can be reached
+    if(play.scrollHeight>play.clientHeight+2){zoomKids(play,1);play.style.height='';play.style.overflow='';play.dataset.nofit='1';root.classList.remove('nwfit-on');busy=false;return}
   }
   setTimeout(()=>{busy=false;if(queued){queued=false;fit()}},30)}
 function soon(){if(busy){queued=true;return}setTimeout(fit,16)}
