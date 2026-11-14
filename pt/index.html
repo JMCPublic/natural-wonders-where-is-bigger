@@ -236,7 +236,7 @@ html.phone body.timed .p3 .pbar{bottom:calc(64px + env(safe-area-inset-bottom))}
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
-const VERSION='v19';
+const VERSION='v20';
 /* ---------- timer (shared) ---------- */
 const TM={on:true,left:0,secs:15,copper:5,t0:0,iv:null,key:null,onUp:null,
   start(key,secs,copper,onUp){if(!this.on){this.hide();return}if(this.key===key&&this.iv)return;this.stop();this.key=key;this.secs=secs;this.copper=copper;this.onUp=onUp;this.t0=performance.now();this.build();this.draw(secs);
@@ -661,6 +661,7 @@ if(document.fonts)document.fonts.ready.then(soon);soon();
 .nwexp .pl{display:flex;gap:3px;flex:none}.nwexp .pl i{width:12px;height:12px;border-radius:3px;background:#ece6da}.nwexp .pl i.y{background:#b8663a}
 .nwexp b{color:var(--ink,#16130f)}
 .nwexp a{margin-left:auto;color:var(--ink,#16130f);font-weight:600;text-decoration:none;white-space:nowrap}
+.nwexp{flex-wrap:wrap;row-gap:6px}.nwexp>span:not(.pl){flex:1 1 130px;min-width:0}
 html.phone .nwnext{grid-template-columns:1fr auto}html.phone .nwnext svg{display:none}
 </style>
 <script>
