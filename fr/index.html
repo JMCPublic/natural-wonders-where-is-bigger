@@ -236,7 +236,7 @@ html.phone body.timed .p3 .pbar{bottom:calc(64px + env(safe-area-inset-bottom))}
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
-const VERSION='v18';
+const VERSION='v19';
 /* ---------- timer (shared) ---------- */
 const TM={on:true,left:0,secs:15,copper:5,t0:0,iv:null,key:null,onUp:null,
   start(key,secs,copper,onUp){if(!this.on){this.hide();return}if(this.key===key&&this.iv)return;this.stop();this.key=key;this.secs=secs;this.copper=copper;this.onUp=onUp;this.t0=performance.now();this.build();this.draw(secs);
@@ -595,6 +595,7 @@ function fit(){busy=true;const root=document.documentElement;
   if(!play){root.classList.remove('nwfit-on');busy=false;return}
   // a screen already found too tall for this phone keeps normal scrolling until the next round
   if(play.dataset.nofit){root.classList.remove('nwfit-on');busy=false;return}
+  const y0=window.scrollY,nowEl=document.querySelector('.prog .now'),key=(nowEl?[...nowEl.parentNode.children].indexOf(nowEl):-1)+'|'+location.pathname,same=key===window.__nwFitKey;window.__nwFitKey=key; /* same round re-drawn (a tap): keep the player where they had scrolled */
   root.classList.add('nwfit-on');window.scrollTo(0,0);
   const phone=root.classList.contains('phone');
   // the play area runs from where it starts down to the timer bar (or the bottom of the window)
@@ -618,7 +619,7 @@ function fit(){busy=true;const root=document.documentElement;
         // still too tall even shrunk (a very small phone): give the page back its normal scrolling, so the answers and
         // the lock-in button can always be reached
         zoomKids(rank,1);board.style.height='';play.style.height='';if(mc){mc.style.flex='';mc.style.removeProperty('height')}
-        play.dataset.nofit='1';root.classList.remove('nwfit-on');busy=false;return}
+        play.dataset.nofit='1';root.classList.remove('nwfit-on');window.scrollTo(0,same?y0:0);busy=false;return}
       if(mc){mc.style.flex='none';mc.style.setProperty('height',(bh-rh-8)+'px','important')}
     }else{
       // desktop: the answer panel never scrolls; if it is short of room, its contents shrink to fit
@@ -629,10 +630,10 @@ function fit(){busy=true;const root=document.documentElement;
   }else{
     // games without a separate answer panel: shrink the whole board a little if it cannot fit
     // phones with the five-country list: always scroll normally (it never fits a phone well, and iPhone Safari could leave it stuck)
-    if(phone&&play.querySelector('.plist')){play.style.height='';play.style.overflow='';play.dataset.nofit='1';root.classList.remove('nwfit-on');busy=false;return}
+    if(phone&&play.querySelector('.plist')){play.style.height='';play.style.overflow='';play.dataset.nofit='1';root.classList.remove('nwfit-on');window.scrollTo(0,same?y0:0);busy=false;return}
     zoomKids(play,1);play.style.overflow='hidden';const over=play.scrollHeight-play.clientHeight;if(over>1){const z=Math.max(.7,play.clientHeight/play.scrollHeight);zoomKids(play,z)}
     // still too tall even shrunk: give the page back its normal scrolling so every answer and the lock-in button can be reached
-    if(play.scrollHeight>play.clientHeight+2){zoomKids(play,1);play.style.height='';play.style.overflow='';play.dataset.nofit='1';root.classList.remove('nwfit-on');busy=false;return}
+    if(play.scrollHeight>play.clientHeight+2){zoomKids(play,1);play.style.height='';play.style.overflow='';play.dataset.nofit='1';root.classList.remove('nwfit-on');window.scrollTo(0,same?y0:0);busy=false;return}
   }
   setTimeout(()=>{busy=false;if(queued){queued=false;fit()}},30)}
 function soon(){if(busy){queued=true;return}setTimeout(fit,16)}
