@@ -44,8 +44,8 @@ rep("const WALES=20782;","const WALES=20782;\nconst HOME=new Set(['DEU','AUT','C
 rep("COUNTRIES.filter(c=>UKSET.has(c.id))","COUNTRIES.filter(c=>HOME.has(c.id))",2)
 rep("COUNTRIES.filter(c=>!UKSET.has(c.id))","COUNTRIES.filter(c=>!HOME.has(c.id))",2)
 rep("const fmt=n=>n.toLocaleString('en-GB');","const fmt=n=>n.toLocaleString('de-DE');const dec=(x,d)=>x.toFixed(d).replace('.',',');")
-rep("function wales(a){const w=a/WALES;if(Math.abs(w-1)<.005)return 'exactly 1 Wales';if(w>=100)return '≈ '+fmt(Math.round(w))+' Waleses';if(w>=1)return '≈ '+w.toFixed(1)+' Waleses';return '≈ '+(w<.1?w.toFixed(2):w.toFixed(1))+' of a Wales'}",
-    "function wales(a){const w=a/SAAR;if(Math.abs(w-1)<.005)return 'genau 1 Saarland';if(w>=100)return '≈ '+fmt(Math.round(w))+'-mal das Saarland';if(w>=1)return '≈ '+dec(w,1)+'-mal das Saarland';return '≈ '+dec(w,w<.1?2:1)+' Saarland'}")
+rep("function wales(a){const w=a/WALES;if(Math.abs(w-1)<.005)return 'exactly 1 Wales';if(Math.abs(w-1)<.05)return 'about the size of Wales';if(w>=100)return '≈ '+fmt(Math.round(w))+' Waleses';if(w>=1)return '≈ '+w.toFixed(1)+' Waleses';return '≈ '+(w<.1?w.toFixed(2):w.toFixed(1))+' of a Wales'}",
+    "function wales(a){const w=a/SAAR;if(Math.abs(w-1)<.005)return 'genau 1 Saarland';if(Math.abs(w-1)<.05)return 'etwa so groß wie das Saarland';if(w>=100)return '≈ '+fmt(Math.round(w))+'-mal das Saarland';if(w>=1)return '≈ '+dec(w,1)+'-mal das Saarland';return '≈ '+dec(w,w<.1?2:1)+' Saarland'}")
 rep("function multTxt(r){return r>=10?Math.round(r)+'×':r>=.1?r.toFixed(1)+'×':r>=.01?r.toFixed(2)+'×':r.toFixed(3)+'×'}",
     "function multTxt(r){return r>=10?Math.round(r)+'×':r>=.1?dec(r,1)+'×':r>=.01?dec(r,2)+'×':dec(r,3)+'×'}")
 rep('aria-label="Country silhouette"','aria-label="Landesumriss"')
@@ -54,15 +54,15 @@ rep("const MODES={names:{t:'Mode 1 — Silhouette + name',s:'See the shape and t
     "const MODES={names:{t:'Modus 1 — Umriss + Name',s:'Umriss und Name sehen'},hidden:{t:'Modus 2 — Nur Umriss',s:'Nur der Umriss. Namen erst am Ende'}};")
 rep("const DIFFS3T={easy:{t:'Easy',s:'Giants and tiddlers'},medium:{t:'Medium',s:'1.3× to 3× the target'},hard:{t:'Hard',s:'Close to the target’s size'}};",
     "const DIFFS3T={easy:{t:'Leicht',s:'Riesen und Winzlinge'},medium:{t:'Mittel',s:'1,3- bis 3-mal so groß'},hard:{t:'Schwer',s:'Fast so groß wie das Ziel'}};")
-rep("const DIFFS={easy:{t:'Easy',s:'2× to 8× apart',lo:2,hi:8},medium:{t:'Medium',s:'1.3× to 2.2× apart',lo:1.3,hi:2.2},hard:{t:'Hard',s:'Within 35% of each other',lo:1.03,hi:1.35}};",
-    "const DIFFS={easy:{t:'Leicht',s:'2- bis 8-mal so groß',lo:2,hi:8},medium:{t:'Mittel',s:'1,3- bis 2,2-mal so groß',lo:1.3,hi:2.2},hard:{t:'Schwer',s:'Höchstens 35 % Unterschied',lo:1.03,hi:1.35}};")
+rep("const DIFFS={easy:{t:'Easy',s:'Up to 8× size difference',lo:2,hi:8},medium:{t:'Medium',s:'Up to 2.2× size difference',lo:1.3,hi:2.2},hard:{t:'Hard',s:'Up to 1.35× size difference',lo:1.03,hi:1.35}};",
+    "const DIFFS={easy:{t:'Leicht',s:'Bis zu 8-mal so groß',lo:2,hi:8},medium:{t:'Mittel',s:'Bis zu 2,2-mal so groß',lo:1.3,hi:2.2},hard:{t:'Schwer',s:'Bis zu 1,35-mal so groß',lo:1.03,hi:1.35}};")
 rep("const REGIONS={world:{t:'Whole world',s:'Mixed from every continent'},home:{t:'Home nations',s:'England, Scotland, Wales, NI or UK v the world'},Europe:{t:'Europe'},Asia:{t:'Asia'},Africa:{t:'Africa'},Americas:{t:'Americas & Oceania'}};",
     "const REGIONS={world:{t:'Ganze Welt',s:'Gemischt von allen Kontinenten'},home:{t:'Deutschsprachige Länder',s:'Deutschland, Österreich, die Schweiz und Luxemburg gegen die Welt'},Europe:{t:'Europa'},Asia:{t:'Asien'},Africa:{t:'Afrika'},Americas:{t:'Amerika & Ozeanien'}};")
 rep("const LAYOUTS={auto:'Auto',phone:'Phone',tablet:'Tablet',desktop:'Desktop'};","const LAYOUTS={auto:'Auto',phone:'Handy',tablet:'Tablet',desktop:'Computer'};")
 # ---- start screen ----
 rep('<b>Natural Wonders</b> · Game 8 of 10 · <a href="https://twominute.games/wonders/">All games</a>','<b>Natural Wonders</b> · Spiel 8 von 10 · <a href="https://twominute.games/wonders/">Alle Spiele</a>')
 rep('<h1>Where is Bigger?</h1>','<h1>Wo ist es größer?</h1>',3)
-rep('Which covers more land? Make all your guesses, then see the real sizes at the end. Prepare to be surprised.','Welches Land ist größer? Erst alle Tipps abgeben, am Ende siehst du die echten Größen. Mach dich auf Überraschungen gefasst.')
+rep('A pair of countries: which covers more land? Choose 5, 10 or even 20 pairs, set the difficulty level, which countries to compare and a time limit. Make your guesses, then see the real sizes at the end. Prepare to be surprised.','Zwei Länder: Welches ist größer? Wähle 5, 10 oder sogar 20 Paare, stell den Schwierigkeitsgrad, die Länder zum Vergleichen und ein Zeitlimit ein. Gib deine Tipps ab und sieh am Ende die echten Größen. Mach dich auf Überraschungen gefasst.')
 rep('<div class="label">Game mode</div>','<div class="label">Spielmodus</div>')
 rep('<div class="label">Number of rounds</div>','<div class="label">Anzahl der Runden</div>')
 rep('${n} rounds<small>${n*5} answers</small>','${n} Runden<small>${n*5} Antworten</small>')
@@ -166,7 +166,7 @@ rep('</b> Natural Wonders explored</span><a href="/wonders/#record">Your record 
 # ---- feedback box ----
 FB=[("[['idea','💡 Idea','What would make it better?'],['like','👍 Like it','What did you enjoy?'],['wrong','🐞 Something’s wrong','What went wrong, and where?']]","[['idea','💡 Idee','Was würde es besser machen?'],['like','👍 Gefällt mir','Was hat dir gefallen?'],['wrong','🐞 Etwas stimmt nicht','Was ist schiefgegangen, und wo?']]"),
     ('aria-label="Feedback or report a problem"><h2>Tell us what you think</h2>','aria-label="Feedback oder Fehler melden"><h2>Sag uns deine Meinung</h2>'),
-    ('Ideas, likes, gripes or something broken. It goes privately to Two Minute Games; nobody else can read it.','Ideen, Lob, Kritik oder etwas kaputt? Die Nachricht geht privat an Two Minute Games, niemand sonst kann sie lesen.'),
+    ('Choose Idea, Like it or Something’s wrong and let us know. It goes privately to the Two Minute Games back office only. It isn’t a public message, and nobody else can read it.','Wähle Idee, Gefällt mir oder Etwas stimmt nicht und sag es uns. Die Nachricht geht vertraulich nur an das Team von Two Minute Games. Sie ist nicht öffentlich, und niemand sonst kann sie lesen.'),
     ('aria-label="Your message"','aria-label="Deine Nachricht"'),
     ('placeholder="Name or email, only if you’d like a reply (optional)" aria-label="Name or email (optional)"','placeholder="Name oder E-Mail, nur wenn du eine Antwort möchtest (freiwillig)" aria-label="Name oder E-Mail (freiwillig)"'),
     ('We also send which game you were on and your type of device, nothing else.','Wir senden außerdem, in welchem Spiel du warst und welches Gerät du nutzt, sonst nichts.'),

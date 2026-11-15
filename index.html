@@ -226,7 +226,7 @@ html.phone body.timed .p3 .pbar{bottom:calc(64px + env(safe-area-inset-bottom))}
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
-const VERSION='v20';
+const VERSION='v21';
 /* ---------- timer (shared) ---------- */
 const TM={on:true,left:0,secs:15,copper:5,t0:0,iv:null,key:null,onUp:null,
   start(key,secs,copper,onUp){if(!this.on){this.hide();return}if(this.key===key&&this.iv)return;this.stop();this.key=key;this.secs=secs;this.copper=copper;this.onUp=onUp;this.t0=performance.now();this.build();this.draw(secs);
@@ -257,8 +257,8 @@ const ROUNDS3=[5,10];
 const DIFF3={easy:[2,40],medium:[1.3,3],hard:[1.03,1.45]};
 const LET='ABCDE';
 const DIFFS3T={easy:{t:'Easy',s:'Giants and tiddlers'},medium:{t:'Medium',s:'1.3× to 3× the target'},hard:{t:'Hard',s:'Close to the target’s size'}};
-const COUNTS=[10,15,20];
-const DIFFS={easy:{t:'Easy',s:'2× to 8× apart',lo:2,hi:8},medium:{t:'Medium',s:'1.3× to 2.2× apart',lo:1.3,hi:2.2},hard:{t:'Hard',s:'Within 35% of each other',lo:1.03,hi:1.35}};
+const COUNTS=[5,10,20];
+const DIFFS={easy:{t:'Easy',s:'Up to 8× size difference',lo:2,hi:8},medium:{t:'Medium',s:'Up to 2.2× size difference',lo:1.3,hi:2.2},hard:{t:'Hard',s:'Up to 1.35× size difference',lo:1.03,hi:1.35}};
 const REGIONS={world:{t:'Whole world',s:'Mixed from every continent'},home:{t:'Home nations',s:'England, Scotland, Wales, NI or UK v the world'},Europe:{t:'Europe'},Asia:{t:'Asia'},Africa:{t:'Africa'},Americas:{t:'Americas & Oceania'}};
 
 let S={screen:'menu',mode:'names',count:10,rounds3:5,game3:[],diff:'easy',region:'world',layout:'auto',pairs:[],cur:0,picks:[],busy:false};
@@ -349,7 +349,7 @@ function makeGame3(){
 }
 function shapeSVG(c,extra=''){return `<svg viewBox="0 0 200 200" role="img" aria-label="Country silhouette"><path d="${c.d}" fill="var(--shape)" fill-rule="evenodd" ${extra}/></svg>`}
 const fmt=n=>n.toLocaleString('en-GB');
-function wales(a){const w=a/WALES;if(Math.abs(w-1)<.005)return 'exactly 1 Wales';if(w>=100)return '≈ '+fmt(Math.round(w))+' Waleses';if(w>=1)return '≈ '+w.toFixed(1)+' Waleses';return '≈ '+(w<.1?w.toFixed(2):w.toFixed(1))+' of a Wales'}
+function wales(a){const w=a/WALES;if(Math.abs(w-1)<.005)return 'exactly 1 Wales';if(Math.abs(w-1)<.05)return 'about the size of Wales';if(w>=100)return '≈ '+fmt(Math.round(w))+' Waleses';if(w>=1)return '≈ '+w.toFixed(1)+' Waleses';return '≈ '+(w<.1?w.toFixed(2):w.toFixed(1))+' of a Wales'}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
 const LAYOUTS={auto:'Auto',phone:'Phone',tablet:'Tablet',desktop:'Desktop'};
@@ -373,7 +373,7 @@ function syncTimer(){if(S.screen!=='play'){TM.hide();return}
 function optRow(key,obj){return `<div class="opts">${Object.entries(obj).map(([k,v])=>`<button class="opt ${S[key]===k?'on':''}" onclick="setOpt('${key}','${k}')">${v.t}${v.s?`<small>${v.s}</small>`:''}</button>`).join('')}</div>`}
 function menuHTML(){
   return `<div class="menuhead"><div><div class="nwser"><b>Natural Wonders</b> · Game 8 of 10 · <a href="https://twominute.games/wonders/">All games</a></div><h1>Where is Bigger?</h1></div>
-  <p class="sub">Which covers more land? Make all your guesses, then see the real sizes at the end. Prepare to be surprised.</p></div>
+  <p class="sub">A pair of countries: which covers more land? Choose 5, 10 or even 20 pairs, set the difficulty level, which countries to compare and a time limit. Make your guesses, then see the real sizes at the end. Prepare to be surprised.</p></div>
   <div class="panel menu">
     <div class="mcol">
       <div class="label">Game mode</div>${optRow('mode',MODES)}
@@ -528,16 +528,16 @@ function sourcesBody(){
   const rows=COUNTRIES.slice().sort((a,b)=>a.n.localeCompare(b.n)).map(c=>`<tr><td>${esc(c.n)}</td><td class="n">${fmt(c.a)} km²</td><td>${c.src==='ONS'?'ONS':'CIA World Factbook'}</td></tr>`).join('');
   return `<h2>Sources</h2>
   <p class="gf">The figures in this game were taken in good faith from the published sources below in October 2026 and are shown exactly as those sources give them. Different reputable sources measure areas in slightly different ways (for example whether lakes, rivers and coastal waters are included), so you may find other figures elsewhere, and a source can occasionally be wrong. If you think a figure is wrong, this is where it came from.</p>
+  <h3>Capitals</h3>
+  <ul><li>The open “world-countries” dataset by Mohammed Le Doze (<a href="https://github.com/mledoze/countries" target="_blank" rel="noopener">github.com/mledoze/countries</a>, Open Database Licence).</li></ul>
+  <h3>Maps</h3>
+  <ul><li>Country outlines: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a> (1:10m, public domain). Remote overseas territories are left off the outlines.</li></ul>
   <h3>Country areas</h3>
   <ul><li><b>CIA World Factbook</b>, total area (land plus inland water), from its final edition. The CIA stopped publishing the Factbook in February 2026; its data is preserved in the public <a href="https://github.com/factbook/factbook.json" target="_blank" rel="noopener">factbook.json archive</a>. See <a href="https://en.wikipedia.org/wiki/The_World_Factbook" target="_blank" rel="noopener">The World Factbook</a>.</li>
   <li>France uses the Factbook's figure for metropolitan France (551,500 km²), to match the outline shown, which leaves out overseas regions such as French Guiana.</li>
   <li>Morocco is not included: the Factbook's figure includes the disputed territory of Western Sahara, so the figure and the outline would not match.</li></ul>
   <h3>England, Scotland, Wales and Northern Ireland</h3>
   <ul><li><b>Office for National Statistics</b>, Standard Area Measurements, as given on <a href="https://en.wikipedia.org/wiki/Countries_of_the_United_Kingdom" target="_blank" rel="noopener">Wikipedia: Countries of the United Kingdom</a>: England 130,462 km², Scotland 78,803 km², Wales 20,782 km², Northern Ireland 14,333 km². “Waleses” use Wales at 20,782 km².</li></ul>
-  <h3>Capitals</h3>
-  <ul><li>The open “world-countries” dataset by Mohammed Le Doze (<a href="https://github.com/mledoze/countries" target="_blank" rel="noopener">github.com/mledoze/countries</a>, Open Database Licence).</li></ul>
-  <h3>Maps</h3>
-  <ul><li>Country outlines: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a> (1:10m, public domain). Remote overseas territories are left off the outlines.</li></ul>
   <h3>Every country and its area</h3><details><summary>${COUNTRIES.length} countries</summary><table>${rows}</table></details>
   <p style="font-size:12px;color:#6f685d;margin-top:14px">${document.title} ${VERSION}</p>`;
 }
@@ -671,11 +671,11 @@ forests:`<g fill="${L}"><path d="M10 40 L20 8 L30 40Z"/><path d="M28 40 L40 4 L5
 const GAMES=[
 {n:'Rivers',slug:'rivers',ic:'rivers',t:'Put the world’s great rivers in order of length. The Nile or the Amazon? The answers might surprise you.'},
 {n:'Lakes',slug:'lakes',ic:'lakes',t:'Rank lakes by area, depth or length. Each round tells you which, so read the question first.'},
-{n:'Bodies of Water',slug:'bodies-of-water',ic:'water',t:'A sea, strait or lake lights up on the map. Can you name it from five?'},
+{n:'Bodies of Water',slug:'bodies-of-water',ic:'water',t:'A sea, strait or lake lights up on the map. Can you name it from four?'},
 {n:'Mountains',slug:'mountains',ic:'mountains',t:'Line up the peaks by height and watch the skyline reveal the order, or name the marked summit.'},
 {n:'Deserts',slug:'deserts',ic:'deserts',t:'Not every desert is hot or sandy. Rank them by size, or name the one that’s highlighted.'},
 {n:'How Many Borders?',slug:'how-many-borders',ic:'borders',t:'One country in silhouette. How many neighbours does it touch by land? Then see them all.'},
-{n:'River Cities',slug:'river-cities',ic:'cities',t:'A river winds through a country. Which of ten cities sit on its banks?'},
+{n:'River Cities',slug:'river-cities',ic:'cities',t:'A river winds through a country. Which of five cities sit on its banks?'},
 {n:'Where is Bigger?',slug:'where-is-bigger',ic:'bigger',t:'Two countries side by side. Which covers more land? Maps have been fooling you for years.'},
 {n:'Which of Five?',slug:'which-of-five',ic:'five',t:'One country to beat and five challengers. Tick every one that’s bigger, then see them all to scale.'},
 {n:'Forests',slug:'forests',ic:'forests',t:'From the Amazon to Sherwood. Rank the world’s forests by area, or name the one marked on the map.'}];
@@ -778,7 +778,7 @@ let v,kind='idea';
 const dev=()=>{const c=matchMedia('(pointer:coarse)').matches,m=Math.min(screen.width,screen.height);return c?(m>=600?'tablet':'phone'):'desktop'};
 function build(){v=document.createElement('div');v.className='tmgfb-v';v.hidden=true;
   v.innerHTML=`<form class="tmgfb-c" role="dialog" aria-label="Feedback or report a problem"><h2>Tell us what you think</h2>
-  <p>Ideas, likes, gripes or something broken. It goes privately to Two Minute Games; nobody else can read it.</p>
+  <p>Choose Idea, Like it or Something’s wrong and let us know. It goes privately to the Two Minute Games back office only. It isn’t a public message, and nobody else can read it.</p>
   <div class="tmgfb-chips">${KINDS.map(k=>`<button type="button" class="tmgfb-chip" data-k="${k[0]}" aria-pressed="${k[0]===kind}">${k[1]}</button>`).join('')}</div>
   <textarea maxlength="1500" required aria-label="Your message"></textarea>
   <input maxlength="150" autocomplete="email" placeholder="Name or email, only if you’d like a reply (optional)" aria-label="Name or email (optional)">

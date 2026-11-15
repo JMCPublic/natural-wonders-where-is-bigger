@@ -51,8 +51,8 @@ function abl(n){const s=String(n).trim(),last=s.split(/[\\s-]+/).pop();if(/^[A-Z
 rep("COUNTRIES.filter(c=>UKSET.has(c.id))","COUNTRIES.filter(c=>HOME.has(c.id))",2)
 rep("COUNTRIES.filter(c=>!UKSET.has(c.id))","COUNTRIES.filter(c=>!HOME.has(c.id))",2)
 rep("const fmt=n=>n.toLocaleString('en-GB');","const fmt=n=>n.toLocaleString('tr-TR');const dec=(x,d)=>x.toFixed(d).replace('.',',');")
-rep("function wales(a){const w=a/WALES;if(Math.abs(w-1)<.005)return 'exactly 1 Wales';if(w>=100)return '≈ '+fmt(Math.round(w))+' Waleses';if(w>=1)return '≈ '+w.toFixed(1)+' Waleses';return '≈ '+(w<.1?w.toFixed(2):w.toFixed(1))+' of a Wales'}",
-    "function wales(a){const w=a/IST;if(Math.abs(w-1)<.005)return 'tam 1 İstanbul';if(w>=100)return '≈ '+fmt(Math.round(w))+' İstanbul';if(w>=1)return '≈ '+dec(w,1)+' İstanbul';return '≈ '+dec(w,w<.1?2:1)+' İstanbul'}")
+rep("function wales(a){const w=a/WALES;if(Math.abs(w-1)<.005)return 'exactly 1 Wales';if(Math.abs(w-1)<.05)return 'about the size of Wales';if(w>=100)return '≈ '+fmt(Math.round(w))+' Waleses';if(w>=1)return '≈ '+w.toFixed(1)+' Waleses';return '≈ '+(w<.1?w.toFixed(2):w.toFixed(1))+' of a Wales'}",
+    "function wales(a){const w=a/IST;if(Math.abs(w-1)<.005)return 'tam 1 İstanbul';if(Math.abs(w-1)<.05)return 'İstanbul ile hemen hemen aynı büyüklükte';if(w>=100)return '≈ '+fmt(Math.round(w))+' İstanbul';if(w>=1)return '≈ '+dec(w,1)+' İstanbul';return '≈ '+dec(w,w<.1?2:1)+' İstanbul'}")
 rep("function multTxt(r){return r>=10?Math.round(r)+'×':r>=.1?r.toFixed(1)+'×':r>=.01?r.toFixed(2)+'×':r.toFixed(3)+'×'}",
     "function multTxt(r){return r>=10?Math.round(r)+'×':r>=.1?dec(r,1)+'×':r>=.01?dec(r,2)+'×':dec(r,3)+'×'}")
 rep('aria-label="Country silhouette"','aria-label="Ülke silueti"')
@@ -61,15 +61,15 @@ rep("const MODES={names:{t:'Mode 1 — Silhouette + name',s:'See the shape and t
     "const MODES={names:{t:'Mod 1 — Siluet + ad',s:'Şekli ve adı gör'},hidden:{t:'Mod 2 — Yalnızca siluet',s:'Yalnızca şekil. Adlar sonunda açıklanır'}};")
 rep("const DIFFS3T={easy:{t:'Easy',s:'Giants and tiddlers'},medium:{t:'Medium',s:'1.3× to 3× the target'},hard:{t:'Hard',s:'Close to the target’s size'}};",
     "const DIFFS3T={easy:{t:'Kolay',s:'Devler ve cüceler'},medium:{t:'Orta',s:'Hedefin 1,3 ile 3 katı'},hard:{t:'Zor',s:'Hedefe yakın büyüklükte'}};")
-rep("const DIFFS={easy:{t:'Easy',s:'2× to 8× apart',lo:2,hi:8},medium:{t:'Medium',s:'1.3× to 2.2× apart',lo:1.3,hi:2.2},hard:{t:'Hard',s:'Within 35% of each other',lo:1.03,hi:1.35}};",
-    "const DIFFS={easy:{t:'Kolay',s:'2 ile 8 kat fark',lo:2,hi:8},medium:{t:'Orta',s:'1,3 ile 2,2 kat fark',lo:1.3,hi:2.2},hard:{t:'Zor',s:'En fazla %35 fark',lo:1.03,hi:1.35}};")
+rep("const DIFFS={easy:{t:'Easy',s:'Up to 8× size difference',lo:2,hi:8},medium:{t:'Medium',s:'Up to 2.2× size difference',lo:1.3,hi:2.2},hard:{t:'Hard',s:'Up to 1.35× size difference',lo:1.03,hi:1.35}};",
+    "const DIFFS={easy:{t:'Kolay',s:'En fazla 8 kat fark',lo:2,hi:8},medium:{t:'Orta',s:'En fazla 2,2 kat fark',lo:1.3,hi:2.2},hard:{t:'Zor',s:'En fazla 1,35 kat fark',lo:1.03,hi:1.35}};")
 rep("const REGIONS={world:{t:'Whole world',s:'Mixed from every continent'},home:{t:'Home nations',s:'England, Scotland, Wales, NI or UK v the world'},Europe:{t:'Europe'},Asia:{t:'Asia'},Africa:{t:'Africa'},Americas:{t:'Americas & Oceania'}};",
     "const REGIONS={world:{t:'Tüm dünya',s:'Her kıtadan karışık'},home:{t:'Türkiye ve komşuları',s:'Türkiye ve komşuları dünyaya karşı'},Europe:{t:'Avrupa'},Asia:{t:'Asya'},Africa:{t:'Afrika'},Americas:{t:'Amerika ve Okyanusya'}};")
 rep("const LAYOUTS={auto:'Auto',phone:'Phone',tablet:'Tablet',desktop:'Desktop'};","const LAYOUTS={auto:'Otomatik',phone:'Telefon',tablet:'Tablet',desktop:'Bilgisayar'};")
 # ---- start screen ----
 rep('<b>Natural Wonders</b> · Game 8 of 10 · <a href="https://twominute.games/wonders/">All games</a>','<b>Natural Wonders</b> · Oyun 8 / 10 · <a href="https://twominute.games/wonders/">Tüm oyunlar</a>')
 rep('<h1>Where is Bigger?</h1>','<h1>Hangisi Daha Büyük?</h1>',3)
-rep('Which covers more land? Make all your guesses, then see the real sizes at the end. Prepare to be surprised.','Hangisi daha çok yer kaplıyor? Önce bütün tahminlerini yap, gerçek büyüklükleri sonunda gör. Şaşırmaya hazır ol.')
+rep('A pair of countries: which covers more land? Choose 5, 10 or even 20 pairs, set the difficulty level, which countries to compare and a time limit. Make your guesses, then see the real sizes at the end. Prepare to be surprised.','İki ülke: hangisi daha çok yer kaplıyor? 5, 10 ya da 20 çift seç; zorluk seviyesini, karşılaştırılacak ülkeleri ve süre sınırını ayarla. Tahminlerini yap, gerçek büyüklükleri sonunda gör. Şaşırmaya hazır ol.')
 rep('<div class="label">Game mode</div>','<div class="label">Oyun modu</div>')
 rep('<div class="label">Number of rounds</div>','<div class="label">Tur sayısı</div>')
 rep('${n} rounds<small>${n*5} answers</small>','${n} tur<small>${n*5} cevap</small>')
@@ -173,7 +173,7 @@ rep('</b> Natural Wonders explored</span><a href="/wonders/#record">Your record 
 # ---- feedback box ----
 FB=[("[['idea','💡 Idea','What would make it better?'],['like','👍 Like it','What did you enjoy?'],['wrong','🐞 Something’s wrong','What went wrong, and where?']]","[['idea','💡 Fikir','Ne daha iyi yapardı?'],['like','👍 Beğendim','En çok neyi sevdin?'],['wrong','🐞 Bir sorun var','Ne ters gitti, nerede?']]"),
     ('aria-label="Feedback or report a problem"><h2>Tell us what you think</h2>','aria-label="Görüş bildir ya da sorun bildir"><h2>Ne düşündüğünü söyle</h2>'),
-    ('Ideas, likes, gripes or something broken. It goes privately to Two Minute Games; nobody else can read it.','Fikirler, beğeniler, şikâyetler ya da bozuk bir şey. Mesaj yalnızca Two Minute Games’e gider; başka kimse okuyamaz.'),
+    ('Choose Idea, Like it or Something’s wrong and let us know. It goes privately to the Two Minute Games back office only. It isn’t a public message, and nobody else can read it.','Fikir, Beğendim ya da Bir sorun var seçeneğini seç ve bize yaz. Mesajın yalnızca Two Minute Games ekibine gider. Herkese açık değildir, başka kimse okuyamaz.'),
     ('aria-label="Your message"','aria-label="Mesajın"'),
     ('placeholder="Name or email, only if you’d like a reply (optional)" aria-label="Name or email (optional)"','placeholder="Ad ya da e-posta, yalnızca cevap istersen (isteğe bağlı)" aria-label="Ad ya da e-posta (isteğe bağlı)"'),
     ('We also send which game you were on and your type of device, nothing else.','Ayrıca hangi oyunda olduğunu ve cihaz türünü gönderiyoruz, başka bir şey değil.'),

@@ -236,7 +236,7 @@ html.phone body.timed .p3 .pbar{bottom:calc(64px + env(safe-area-inset-bottom))}
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
-const VERSION='v20';
+const VERSION='v21';
 /* ---------- timer (shared) ---------- */
 const TM={on:true,left:0,secs:15,copper:5,t0:0,iv:null,key:null,onUp:null,
   start(key,secs,copper,onUp){if(!this.on){this.hide();return}if(this.key===key&&this.iv)return;this.stop();this.key=key;this.secs=secs;this.copper=copper;this.onUp=onUp;this.t0=performance.now();this.build();this.draw(secs);
@@ -273,8 +273,8 @@ const ROUNDS3=[5,10];
 const DIFF3={easy:[2,40],medium:[1.3,3],hard:[1.03,1.45]};
 const LET='ABCDE';
 const DIFFS3T={easy:{t:'Kolay',s:'Devler ve cüceler'},medium:{t:'Orta',s:'Hedefin 1,3 ile 3 katı'},hard:{t:'Zor',s:'Hedefe yakın büyüklükte'}};
-const COUNTS=[10,15,20];
-const DIFFS={easy:{t:'Kolay',s:'2 ile 8 kat fark',lo:2,hi:8},medium:{t:'Orta',s:'1,3 ile 2,2 kat fark',lo:1.3,hi:2.2},hard:{t:'Zor',s:'En fazla %35 fark',lo:1.03,hi:1.35}};
+const COUNTS=[5,10,20];
+const DIFFS={easy:{t:'Kolay',s:'En fazla 8 kat fark',lo:2,hi:8},medium:{t:'Orta',s:'En fazla 2,2 kat fark',lo:1.3,hi:2.2},hard:{t:'Zor',s:'En fazla 1,35 kat fark',lo:1.03,hi:1.35}};
 const REGIONS={world:{t:'Tüm dünya',s:'Her kıtadan karışık'},home:{t:'Türkiye ve komşuları',s:'Türkiye ve komşuları dünyaya karşı'},Europe:{t:'Avrupa'},Asia:{t:'Asya'},Africa:{t:'Afrika'},Americas:{t:'Amerika ve Okyanusya'}};
 
 let S={screen:'menu',mode:'names',count:10,rounds3:5,game3:[],diff:'easy',region:'home',layout:'auto',pairs:[],cur:0,picks:[],busy:false};
@@ -365,7 +365,7 @@ function makeGame3(){
 }
 function shapeSVG(c,extra=''){return `<svg viewBox="0 0 200 200" role="img" aria-label="Ülke silueti"><path d="${c.d}" fill="var(--shape)" fill-rule="evenodd" ${extra}/></svg>`}
 const fmt=n=>n.toLocaleString('tr-TR');const dec=(x,d)=>x.toFixed(d).replace('.',',');
-function wales(a){const w=a/IST;if(Math.abs(w-1)<.005)return 'tam 1 İstanbul';if(w>=100)return '≈ '+fmt(Math.round(w))+' İstanbul';if(w>=1)return '≈ '+dec(w,1)+' İstanbul';return '≈ '+dec(w,w<.1?2:1)+' İstanbul'}
+function wales(a){const w=a/IST;if(Math.abs(w-1)<.005)return 'tam 1 İstanbul';if(Math.abs(w-1)<.05)return 'İstanbul ile hemen hemen aynı büyüklükte';if(w>=100)return '≈ '+fmt(Math.round(w))+' İstanbul';if(w>=1)return '≈ '+dec(w,1)+' İstanbul';return '≈ '+dec(w,w<.1?2:1)+' İstanbul'}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
 const LAYOUTS={auto:'Otomatik',phone:'Telefon',tablet:'Tablet',desktop:'Bilgisayar'};
@@ -389,7 +389,7 @@ function syncTimer(){if(S.screen!=='play'){TM.hide();return}
 function optRow(key,obj){return `<div class="opts">${Object.entries(obj).map(([k,v])=>`<button class="opt ${S[key]===k?'on':''}" onclick="setOpt('${key}','${k}')">${v.t}${v.s?`<small>${v.s}</small>`:''}</button>`).join('')}</div>`}
 function menuHTML(){
   return `<div class="menuhead"><div><div class="nwser"><b>Natural Wonders</b> · Oyun 8 / 10 · <a href="https://twominute.games/wonders/">Tüm oyunlar</a></div><h1>Hangisi Daha Büyük?</h1></div>
-  <p class="sub">Hangisi daha çok yer kaplıyor? Önce bütün tahminlerini yap, gerçek büyüklükleri sonunda gör. Şaşırmaya hazır ol.</p></div>
+  <p class="sub">İki ülke: hangisi daha çok yer kaplıyor? 5, 10 ya da 20 çift seç; zorluk seviyesini, karşılaştırılacak ülkeleri ve süre sınırını ayarla. Tahminlerini yap, gerçek büyüklükleri sonunda gör. Şaşırmaya hazır ol.</p></div>
   <div class="panel menu">
     <div class="mcol">
       <div class="label">Oyun modu</div>${optRow('mode',MODES)}
@@ -544,16 +544,16 @@ function sourcesBody(){
   const rows=COUNTRIES.slice().sort((a,b)=>a.n.localeCompare(b.n,'tr')).map(c=>`<tr><td>${esc(c.n)}</td><td class="n">${fmt(c.a)} km²</td><td>${c.src==='ONS'?'ONS':'CIA World Factbook'}</td></tr>`).join('');
   return `<h2>Kaynaklar</h2>
   <p class="gf">Bu oyundaki rakamlar Ekim 2026’da aşağıdaki yayımlanmış kaynaklardan iyi niyetle alındı ve kaynakların verdiği şekliyle gösteriliyor. Güvenilir kaynaklar yüzölçümünü biraz farklı biçimlerde ölçer (örneğin göller, nehirler ve kıyı suları dahil mi), bu yüzden başka yerlerde farklı rakamlar görebilirsin; bir kaynak zaman zaman yanılabilir de. Bir rakamın yanlış olduğunu düşünüyorsan, nereden geldiğini burada bulabilirsin.</p>
+  <h3>Başkentler</h3>
+  <ul><li>Mohammed Le Doze’un açık “world-countries” veri seti (<a href="https://github.com/mledoze/countries" target="_blank" rel="noopener">github.com/mledoze/countries</a>, Open Database Licence).</li></ul>
+  <h3>Haritalar</h3>
+  <ul><li>Ülke sınırları: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a> (1:10m, kamu malı). Uzak denizaşırı topraklar sınırlarda gösterilmiyor.</li></ul>
   <h3>Ülke yüzölçümleri</h3>
   <ul><li><b>CIA World Factbook</b>, toplam yüzölçümü (kara ve iç sular), son baskısından. CIA, Factbook’u Şubat 2026’da yayımlamayı bıraktı; verileri herkese açık <a href="https://github.com/factbook/factbook.json" target="_blank" rel="noopener">factbook.json arşivinde</a> saklanıyor. Ayrıca bkz. <a href="https://en.wikipedia.org/wiki/The_World_Factbook" target="_blank" rel="noopener">The World Factbook</a>.</li>
   <li>Fransa için, gösterilen sınırla uyumlu olsun diye Factbook’un anakara Fransa rakamı (551.500 km²) kullanıldı; Fransız Guyanası gibi denizaşırı bölgeler dahil değil.</li>
   <li>Fas oyunda yok: Factbook’un rakamı tartışmalı Batı Sahra bölgesini de içeriyor, bu yüzden rakam ile sınır uyuşmazdı.</li></ul>
   <h3>İngiltere, İskoçya, Galler ve Kuzey İrlanda</h3>
   <ul><li><b>Office for National Statistics</b>, Standard Area Measurements, kaynak: <a href="https://en.wikipedia.org/wiki/Countries_of_the_United_Kingdom" target="_blank" rel="noopener">Wikipedia: Countries of the United Kingdom</a>: İngiltere 130.462 km², İskoçya 78.803 km², Galler 20.782 km², Kuzey İrlanda 14.333 km².</li><li>İstanbul karşılaştırmalarında, TÜİK’in nüfus yoğunluğu hesabında kullandığı İstanbul ili yüzölçümü olan 5.196 km² kullanıldı.</li></ul>
-  <h3>Başkentler</h3>
-  <ul><li>Mohammed Le Doze’un açık “world-countries” veri seti (<a href="https://github.com/mledoze/countries" target="_blank" rel="noopener">github.com/mledoze/countries</a>, Open Database Licence).</li></ul>
-  <h3>Haritalar</h3>
-  <ul><li>Ülke sınırları: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a> (1:10m, kamu malı). Uzak denizaşırı topraklar sınırlarda gösterilmiyor.</li></ul>
   <h3>Tüm ülkeler ve yüzölçümleri</h3><details><summary>${COUNTRIES.length} ülke</summary><table>${rows}</table></details>
   <p style="font-size:12px;color:#6f685d;margin-top:14px">${document.title} ${VERSION}</p>`;
 }
@@ -687,11 +687,11 @@ forests:`<g fill="${L}"><path d="M10 40 L20 8 L30 40Z"/><path d="M28 40 L40 4 L5
 const GAMES=[
 {n:"Nehirler",slug:'rivers',ic:'rivers',t:"Dünyanın büyük nehirlerini uzunluklarına göre sırala. Nil mi, Amazon mu? Cevaplar seni şaşırtabilir."},
 {n:'Lakes',slug:'lakes',ic:'lakes',t:'Rank lakes by area, depth or length. Each round tells you which, so read the question first.'},
-{n:'Bodies of Water',slug:'bodies-of-water',ic:'water',t:'A sea, strait or lake lights up on the map. Can you name it from five?'},
+{n:'Bodies of Water',slug:'bodies-of-water',ic:'water',t:'A sea, strait or lake lights up on the map. Can you name it from four?'},
 {n:'Mountains',slug:'mountains',ic:'mountains',t:'Line up the peaks by height and watch the skyline reveal the order, or name the marked summit.'},
 {n:'Deserts',slug:'deserts',ic:'deserts',t:'Not every desert is hot or sandy. Rank them by size, or name the one that’s highlighted.'},
 {n:'How Many Borders?',slug:'how-many-borders',ic:'borders',t:'One country in silhouette. How many neighbours does it touch by land? Then see them all.'},
-{n:'River Cities',slug:'river-cities',ic:'cities',t:'A river winds through a country. Which of ten cities sit on its banks?'},
+{n:'River Cities',slug:'river-cities',ic:'cities',t:'A river winds through a country. Which of five cities sit on its banks?'},
 {n:'Hangisi Daha Büyük?',slug:'where-is-bigger',ic:'bigger',t:'Yan yana iki ülke. Hangisi daha büyük? Haritalar yıllardır seni yanıltıyor.'},
 {n:'Which of Five?',slug:'which-of-five',ic:'five',t:'One country to beat and five challengers. Tick every one that’s bigger, then see them all to scale.'},
 {n:'Forests',slug:'forests',ic:'forests',t:'From the Amazon to Sherwood. Rank the world’s forests by area, or name the one marked on the map.'}];
@@ -794,7 +794,7 @@ let v,kind='idea';
 const dev=()=>{const c=matchMedia('(pointer:coarse)').matches,m=Math.min(screen.width,screen.height);return c?(m>=600?'tablet':'phone'):'desktop'};
 function build(){v=document.createElement('div');v.className='tmgfb-v';v.hidden=true;
   v.innerHTML=`<form class="tmgfb-c" role="dialog" aria-label="Görüş bildir ya da sorun bildir"><h2>Ne düşündüğünü söyle</h2>
-  <p>Fikirler, beğeniler, şikâyetler ya da bozuk bir şey. Mesaj yalnızca Two Minute Games’e gider; başka kimse okuyamaz.</p>
+  <p>Fikir, Beğendim ya da Bir sorun var seçeneğini seç ve bize yaz. Mesajın yalnızca Two Minute Games ekibine gider. Herkese açık değildir, başka kimse okuyamaz.</p>
   <div class="tmgfb-chips">${KINDS.map(k=>`<button type="button" class="tmgfb-chip" data-k="${k[0]}" aria-pressed="${k[0]===kind}">${k[1]}</button>`).join('')}</div>
   <textarea maxlength="1500" required aria-label="Mesajın"></textarea>
   <input maxlength="150" autocomplete="email" placeholder="Ad ya da e-posta, yalnızca cevap istersen (isteğe bağlı)" aria-label="Ad ya da e-posta (isteğe bağlı)">

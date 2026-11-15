@@ -236,7 +236,7 @@ html.phone body.timed .p3 .pbar{bottom:calc(64px + env(safe-area-inset-bottom))}
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
-const VERSION='v20';
+const VERSION='v21';
 /* ---------- timer (shared) ---------- */
 const TM={on:true,left:0,secs:15,copper:5,t0:0,iv:null,key:null,onUp:null,
   start(key,secs,copper,onUp){if(!this.on){this.hide();return}if(this.key===key&&this.iv)return;this.stop();this.key=key;this.secs=secs;this.copper=copper;this.onUp=onUp;this.t0=performance.now();this.build();this.draw(secs);
@@ -268,8 +268,8 @@ const ROUNDS3=[5,10];
 const DIFF3={easy:[2,40],medium:[1.3,3],hard:[1.03,1.45]};
 const LET='ABCDE';
 const DIFFS3T={easy:{t:'Leicht',s:'Riesen und Winzlinge'},medium:{t:'Mittel',s:'1,3- bis 3-mal so groß'},hard:{t:'Schwer',s:'Fast so groß wie das Ziel'}};
-const COUNTS=[10,15,20];
-const DIFFS={easy:{t:'Leicht',s:'2- bis 8-mal so groß',lo:2,hi:8},medium:{t:'Mittel',s:'1,3- bis 2,2-mal so groß',lo:1.3,hi:2.2},hard:{t:'Schwer',s:'Höchstens 35 % Unterschied',lo:1.03,hi:1.35}};
+const COUNTS=[5,10,20];
+const DIFFS={easy:{t:'Leicht',s:'Bis zu 8-mal so groß',lo:2,hi:8},medium:{t:'Mittel',s:'Bis zu 2,2-mal so groß',lo:1.3,hi:2.2},hard:{t:'Schwer',s:'Bis zu 1,35-mal so groß',lo:1.03,hi:1.35}};
 const REGIONS={world:{t:'Ganze Welt',s:'Gemischt von allen Kontinenten'},home:{t:'Deutschsprachige Länder',s:'Deutschland, Österreich, die Schweiz und Luxemburg gegen die Welt'},Europe:{t:'Europa'},Asia:{t:'Asien'},Africa:{t:'Afrika'},Americas:{t:'Amerika & Ozeanien'}};
 
 let S={screen:'menu',mode:'names',count:10,rounds3:5,game3:[],diff:'easy',region:'home',layout:'auto',pairs:[],cur:0,picks:[],busy:false};
@@ -360,7 +360,7 @@ function makeGame3(){
 }
 function shapeSVG(c,extra=''){return `<svg viewBox="0 0 200 200" role="img" aria-label="Landesumriss"><path d="${c.d}" fill="var(--shape)" fill-rule="evenodd" ${extra}/></svg>`}
 const fmt=n=>n.toLocaleString('de-DE');const dec=(x,d)=>x.toFixed(d).replace('.',',');
-function wales(a){const w=a/SAAR;if(Math.abs(w-1)<.005)return 'genau 1 Saarland';if(w>=100)return '≈ '+fmt(Math.round(w))+'-mal das Saarland';if(w>=1)return '≈ '+dec(w,1)+'-mal das Saarland';return '≈ '+dec(w,w<.1?2:1)+' Saarland'}
+function wales(a){const w=a/SAAR;if(Math.abs(w-1)<.005)return 'genau 1 Saarland';if(Math.abs(w-1)<.05)return 'etwa so groß wie das Saarland';if(w>=100)return '≈ '+fmt(Math.round(w))+'-mal das Saarland';if(w>=1)return '≈ '+dec(w,1)+'-mal das Saarland';return '≈ '+dec(w,w<.1?2:1)+' Saarland'}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
 const LAYOUTS={auto:'Auto',phone:'Handy',tablet:'Tablet',desktop:'Computer'};
@@ -384,7 +384,7 @@ function syncTimer(){if(S.screen!=='play'){TM.hide();return}
 function optRow(key,obj){return `<div class="opts">${Object.entries(obj).map(([k,v])=>`<button class="opt ${S[key]===k?'on':''}" onclick="setOpt('${key}','${k}')">${v.t}${v.s?`<small>${v.s}</small>`:''}</button>`).join('')}</div>`}
 function menuHTML(){
   return `<div class="menuhead"><div><div class="nwser"><b>Natural Wonders</b> · Spiel 8 von 10 · <a href="https://twominute.games/wonders/">Alle Spiele</a></div><h1>Wo ist es größer?</h1></div>
-  <p class="sub">Welches Land ist größer? Erst alle Tipps abgeben, am Ende siehst du die echten Größen. Mach dich auf Überraschungen gefasst.</p></div>
+  <p class="sub">Zwei Länder: Welches ist größer? Wähle 5, 10 oder sogar 20 Paare, stell den Schwierigkeitsgrad, die Länder zum Vergleichen und ein Zeitlimit ein. Gib deine Tipps ab und sieh am Ende die echten Größen. Mach dich auf Überraschungen gefasst.</p></div>
   <div class="panel menu">
     <div class="mcol">
       <div class="label">Spielmodus</div>${optRow('mode',MODES)}
@@ -539,16 +539,16 @@ function sourcesBody(){
   const rows=COUNTRIES.slice().sort((a,b)=>a.n.localeCompare(b.n,'de')).map(c=>`<tr><td>${esc(c.n)}</td><td class="n">${fmt(c.a)} km²</td><td>${c.src==='ONS'?'ONS':'CIA World Factbook'}</td></tr>`).join('');
   return `<h2>Quellen</h2>
   <p class="gf">Die Zahlen in diesem Spiel stammen nach bestem Wissen aus den unten genannten Quellen (Stand Oktober 2026) und werden genau so gezeigt, wie die Quellen sie angeben. Seriöse Quellen messen Flächen leicht unterschiedlich (zum Beispiel mit oder ohne Seen, Flüsse und Küstengewässer), daher findest du anderswo womöglich andere Zahlen, und auch eine Quelle kann einmal falsch liegen. Wenn du eine Zahl für falsch hältst, siehst du hier, woher sie stammt.</p>
+  <h3>Hauptstädte</h3>
+  <ul><li>Der offene Datensatz „world-countries“ von Mohammed Le Doze (<a href="https://github.com/mledoze/countries" target="_blank" rel="noopener">github.com/mledoze/countries</a>, Open Database Licence).</li></ul>
+  <h3>Karten</h3>
+  <ul><li>Länderumrisse: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a> (1:10m, gemeinfrei). Entlegene Überseegebiete fehlen in den Umrissen.</li></ul>
   <h3>Landesflächen</h3>
   <ul><li><b>CIA World Factbook</b>, Gesamtfläche (Land plus Binnengewässer), aus der letzten Ausgabe. Die CIA hat das Factbook im Februar 2026 eingestellt; die Daten sind im öffentlichen <a href="https://github.com/factbook/factbook.json" target="_blank" rel="noopener">factbook.json-Archiv</a> erhalten. Siehe <a href="https://en.wikipedia.org/wiki/The_World_Factbook" target="_blank" rel="noopener">The World Factbook</a>.</li>
   <li>Für Frankreich gilt die Factbook-Zahl für das europäische Frankreich (551.500 km²), passend zum gezeigten Umriss ohne Überseegebiete wie Französisch-Guayana.</li>
   <li>Marokko ist nicht dabei: Die Factbook-Zahl schließt das umstrittene Gebiet Westsahara ein, Zahl und Umriss würden also nicht zusammenpassen.</li></ul>
   <h3>England, Schottland, Wales und Nordirland</h3>
   <ul><li><b>Office for National Statistics</b>, Standard Area Measurements, wie angegeben auf <a href="https://en.wikipedia.org/wiki/Countries_of_the_United_Kingdom" target="_blank" rel="noopener">Wikipedia: Countries of the United Kingdom</a>: England 130.462 km², Schottland 78.803 km², Wales 20.782 km², Nordirland 14.333 km².</li><li>Vergleiche mit dem Saarland nutzen 2.570 km² (Statistisches Amt Saarland).</li></ul>
-  <h3>Hauptstädte</h3>
-  <ul><li>Der offene Datensatz „world-countries“ von Mohammed Le Doze (<a href="https://github.com/mledoze/countries" target="_blank" rel="noopener">github.com/mledoze/countries</a>, Open Database Licence).</li></ul>
-  <h3>Karten</h3>
-  <ul><li>Länderumrisse: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a> (1:10m, gemeinfrei). Entlegene Überseegebiete fehlen in den Umrissen.</li></ul>
   <h3>Alle Länder und ihre Fläche</h3><details><summary>${COUNTRIES.length} Länder</summary><table>${rows}</table></details>
   <p style="font-size:12px;color:#6f685d;margin-top:14px">${document.title} ${VERSION}</p>`;
 }
@@ -682,11 +682,11 @@ forests:`<g fill="${L}"><path d="M10 40 L20 8 L30 40Z"/><path d="M28 40 L40 4 L5
 const GAMES=[
 {n:"Flüsse",slug:'rivers',ic:'rivers',t:"Bring die großen Flüsse der Welt nach Länge in die richtige Reihenfolge. Nil oder Amazonas? Die Antworten könnten dich überraschen."},
 {n:'Lakes',slug:'lakes',ic:'lakes',t:'Rank lakes by area, depth or length. Each round tells you which, so read the question first.'},
-{n:'Bodies of Water',slug:'bodies-of-water',ic:'water',t:'A sea, strait or lake lights up on the map. Can you name it from five?'},
+{n:'Bodies of Water',slug:'bodies-of-water',ic:'water',t:'A sea, strait or lake lights up on the map. Can you name it from four?'},
 {n:'Mountains',slug:'mountains',ic:'mountains',t:'Line up the peaks by height and watch the skyline reveal the order, or name the marked summit.'},
 {n:'Deserts',slug:'deserts',ic:'deserts',t:'Not every desert is hot or sandy. Rank them by size, or name the one that’s highlighted.'},
 {n:'How Many Borders?',slug:'how-many-borders',ic:'borders',t:'One country in silhouette. How many neighbours does it touch by land? Then see them all.'},
-{n:'River Cities',slug:'river-cities',ic:'cities',t:'A river winds through a country. Which of ten cities sit on its banks?'},
+{n:'River Cities',slug:'river-cities',ic:'cities',t:'A river winds through a country. Which of five cities sit on its banks?'},
 {n:'Wo ist es größer?',slug:'where-is-bigger',ic:'bigger',t:'Zwei Länder nebeneinander. Welches ist größer? Karten täuschen dich seit Jahren.'},
 {n:'Which of Five?',slug:'which-of-five',ic:'five',t:'One country to beat and five challengers. Tick every one that’s bigger, then see them all to scale.'},
 {n:'Forests',slug:'forests',ic:'forests',t:'From the Amazon to Sherwood. Rank the world’s forests by area, or name the one marked on the map.'}];
@@ -789,7 +789,7 @@ let v,kind='idea';
 const dev=()=>{const c=matchMedia('(pointer:coarse)').matches,m=Math.min(screen.width,screen.height);return c?(m>=600?'tablet':'phone'):'desktop'};
 function build(){v=document.createElement('div');v.className='tmgfb-v';v.hidden=true;
   v.innerHTML=`<form class="tmgfb-c" role="dialog" aria-label="Feedback oder Fehler melden"><h2>Sag uns deine Meinung</h2>
-  <p>Ideen, Lob, Kritik oder etwas kaputt? Die Nachricht geht privat an Two Minute Games, niemand sonst kann sie lesen.</p>
+  <p>Wähle Idee, Gefällt mir oder Etwas stimmt nicht und sag es uns. Die Nachricht geht vertraulich nur an das Team von Two Minute Games. Sie ist nicht öffentlich, und niemand sonst kann sie lesen.</p>
   <div class="tmgfb-chips">${KINDS.map(k=>`<button type="button" class="tmgfb-chip" data-k="${k[0]}" aria-pressed="${k[0]===kind}">${k[1]}</button>`).join('')}</div>
   <textarea maxlength="1500" required aria-label="Deine Nachricht"></textarea>
   <input maxlength="150" autocomplete="email" placeholder="Name oder E-Mail, nur wenn du eine Antwort möchtest (freiwillig)" aria-label="Name oder E-Mail (freiwillig)">
