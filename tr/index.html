@@ -236,7 +236,7 @@ html.phone body.timed .p3 .pbar{bottom:calc(64px + env(safe-area-inset-bottom))}
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
-const VERSION='v21';
+const VERSION='v22';
 /* ---------- timer (shared) ---------- */
 const TM={on:true,left:0,secs:15,copper:5,t0:0,iv:null,key:null,onUp:null,
   start(key,secs,copper,onUp){if(!this.on){this.hide();return}if(this.key===key&&this.iv)return;this.stop();this.key=key;this.secs=secs;this.copper=copper;this.onUp=onUp;this.t0=performance.now();this.build();this.draw(secs);
@@ -585,6 +585,9 @@ html.nwfit-on .rank{overflow:hidden}
  html:not(.phone).nwfit-on .rank .label{margin:10px 0 6px}
  html:not(.phone).nwfit-on .kbd{display:none}
 }
+
+/* lock-in sits in place when everything fits (it only floats when the page scrolls) */
+html.phone.nwfit-on .rank .btn{position:static!important;box-shadow:none!important}
 </style>
 <script>
 (()=>{
